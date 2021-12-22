@@ -14,26 +14,24 @@ key = tk.PhotoImage(file='image/key.png')
 stair=tk.PhotoImage(file="image/stair.png")
 heart_image=tk.PhotoImage(file="image/heart.png")
 diamond =tk.PhotoImage(file="image/dimond.png")
+congrats = tk.PhotoImage(file='image/congrats.png')
 grid = [
-    [4,0,0,0,0,0],
+    [0,0,4,0,0,0],
     [0,0,2,5,2,0],
     [0,2,5,2,5,0],
-    [0,5,2,5,0,5],
+    [0,5,2,0,0,5],
     [0,2,5,5,5,0],
-    [0,1,0,0,0,3],
+    [0,1,0,3,0,0],
 ]
 
 countScore = 0
+hasKey = False
+
 
 def drawGrid():
     canvas.delete('all')
     canvas.create_image(210,310, image=myBackground)
     
-    canvas.create_image(260,510,image=stair)
-    canvas.create_image(260,420,image=stair)
-    canvas.create_image(260,330,image=stair)
-    canvas.create_image(260,240,image=stair)
-    canvas.create_image(-225,150,image=stair)
     canvas.create_text(250,30,text='Lives: ',font=('Ubuntu',18))
     canvas.create_image(300,30,image=heart_image)
     canvas.create_image(340,30,image=heart_image)
@@ -59,8 +57,9 @@ def drawGrid():
             elif grid[row][col] == 4:
                 canvas.create_image(x+45,y+45,image = key,anchor='center')  
             elif grid[row][col] == 5:
-                canvas.create_image(x+45,y+45,image = diamond,anchor='center')  
-                                
+                canvas.create_image(x+45,y+45,image = diamond,anchor='center') 
+            elif grid[row][col]== 6:
+                canvas.create_image(x,y,image= stair,anchor='center')           
             x+=90
         x=35
         y+=90
@@ -82,7 +81,7 @@ def getColOf1():
     return index
 
 def move_left(event):
-    global countScore
+    global countScore, hasKey
     row = getRowOf1()
     col = getColOf1()
     if col != 0:
@@ -91,10 +90,16 @@ def move_left(event):
         grid[row][col-1]=1
         if oldValue == 5:
             countScore += 10
+        elif oldValue == 4:
+            hasKey = True
+            canvas.create_text(100,100,text='you has key, You can go to house!')
+        # elif oldValue == 3:
+        #     canvas.create_image(50,50,congrats)
+            
     # print(grid)
         drawGrid()
 def move_right(event):
-    global countScore
+    global countScore, hasKey
     row = getRowOf1()
     col = getColOf1()
     if col < len(grid[0])-1:
@@ -103,24 +108,31 @@ def move_right(event):
         grid[row][col+1]=1
         if oldValue == 5:
             countScore += 10
+        elif oldValue == 4:
+            hasKey = True
+            canvas.create_text(100,100,text='you has key, You can go to house!')
     # print(grid)
         drawGrid()
 
 def move_down(event):
-    global countScore
+    global countScore, hasKey
     row = getRowOf1()
     col = getColOf1()
+    
     if row < len(grid)-1:
         oldValue = grid[row+1][col]
         grid[row][col] = 0
         grid[row+1][col]=1
         if oldValue == 5:
             countScore += 10
+        elif oldValue == 4:
+            hasKey = True
+            canvas.create_text(100,100,text='you has key, You can go to house!')
     # print(grid)
         drawGrid()
 
 def move_up(event):
-    global countScore
+    global countScore, hasKey
     row = getRowOf1()
     col = getColOf1()
     if row != 0:
@@ -129,6 +141,9 @@ def move_up(event):
         grid[row-1][col]=1
         if oldValue == 5:
             countScore += 10
+        elif oldValue == 4:
+            hasKey = True
+            canvas.create_text(100,100,text='you has key, You can go to house!')
     # print(grid)
         drawGrid()
 
