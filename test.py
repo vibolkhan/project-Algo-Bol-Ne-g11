@@ -1,6 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
-import winsound
+
 root = tk.Tk() 
 root.geometry("610x610")
 frame = tk.Frame()
@@ -21,22 +20,22 @@ grid = [
     [0,0,4,5,2,0],
     [0,2,5,2,5,0],
     [0,5,2,0,0,5],
-    [6,6,6,6,6,6],
+    [0,2,5,5,5,0],
     [0,1,0,3,0,0],
 ]
 
 countScore = 0
 hasKey = False
-lives = 3
+arrivedHome = False
+
 def drawGrid():
     canvas.delete('all')
     canvas.create_image(210,310, image=myBackground)
     
     canvas.create_text(250,30,text='Lives: ',font=('Ubuntu',18))
-
-    heart1 = canvas.create_image(300,30,image=heart_image)
-    heart2 = canvas.create_image(340,30,image=heart_image)
-    heart3 = canvas.create_image(380,30,image=heart_image)
+    canvas.create_image(300,30,image=heart_image)
+    canvas.create_image(340,30,image=heart_image)
+    canvas.create_image(380,30,image=heart_image)
 
     canvas.create_text(540,30,text='Levels: 1 ',font=('Ubuntu',18))
 
@@ -46,12 +45,15 @@ def drawGrid():
     if hasKey:
         canvas.create_text(300,70,text='You has key',font=('Ubuntu',18))
 
+    if arrivedHome:
+        canvas.itemconfig(textkey,text='You Win!')
+
     x=35
     y=80
     for row in range(len(grid)):
         for col in range(len(grid[row])):
             if grid[row][col] == 0:
-                canvas.create_rectangle(x,y,x+90,y+90,fill='')#,outline='')
+                canvas.create_rectangle(x,y,x+90,y+90,fill='',outline='')
             elif grid[row][col] == 1:
                 canvas.create_image(x+45,y+45,image = avatar,anchor='center')   
             elif grid[row][col] == 2:
@@ -63,7 +65,7 @@ def drawGrid():
             elif grid[row][col] == 5:
                 canvas.create_image(x+45,y+45,image = diamond,anchor='center') 
             elif grid[row][col]== 6:
-                canvas.create_image(x+45,y,image= stair,anchor='center')           
+                canvas.create_image(x,y,image= stair,anchor='center')           
             x+=90
         x=35
         y+=90
@@ -85,109 +87,83 @@ def getColOf1():
     return index
 
 def move_left(event):
-    global countScore, hasKey,textkey,lives
+    global countScore, hasKey,textkey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
-    if col != 0:
+    if col != 0 and grid[row][col-1] != 3:
         oldValue = grid[row][col-1]
         grid[row][col] = 0
         grid[row][col-1]=1
         if oldValue == 5:
             countScore += 10
-            winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         elif oldValue == 4:
             hasKey = True
             textkey="You can go home now"
             
-        elif oldValue == 3 and hasKey:
-            messagebox.showinfo("Win","You Win!")
-        elif oldValue == 2:
-            lives -= 1
-            if lives == 2:
-                canvas.delete('heart1')
-            elif lives == 1:
-                canvas.delete('heart2')
-            elif lives == 0:
-                messagebox.showinfo("Lost","You Lost!")
+        if oldValue == 3 and hasKey:
+            arrivedHome = True
     drawGrid()
 def move_right(event):
-    global countScore, hasKey,textkey,lives
+    global countScore, hasKey,textkey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
-    if col < len(grid[0])-1:
+    if col < len(grid[0])-1 and grid[row][col+1] != 3:
         oldValue = grid[row][col+1]
         grid[row][col] = 0
         grid[row][col+1]=1
         if oldValue == 5:
             countScore += 10
-            winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         elif oldValue == 4:
             hasKey = True
             textkey="You can go home now"
-        elif oldValue == 3 and hasKey:
-            messagebox.showinfo("Win","You Win!")
-        elif oldValue == 2:
-            lives -= 1
-            if lives == 2:
-                canvas.delete('heart1')
-            elif lives == 1:
-                canvas.delete('heart2')
-            elif lives == 0:
-                messagebox.showinfo("Lost","You Lost!")
+        if oldValue == 3 and hasKey:
+            arrivedHome = True
     drawGrid()
 
 def move_down(event):
-    global countScore, hasKey,textkey,lives
+    global countScore, hasKey,textkey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
     
-    if row < len(grid)-1:
+    if row < len(grid)-1 and grid[row+1][col] != 3:
         oldValue = grid[row+1][col]
         grid[row][col] = 0
         grid[row+1][col]=1
         if oldValue == 5:
             countScore += 10
-            winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         elif oldValue == 4:
             hasKey = True
             textkey="You can go home now"
-        elif oldValue == 3 and hasKey:
-           messagebox.showinfo("Win","You Win!")
-        elif oldValue == 2:
-            lives -= 1
-            if lives == 2:
-                canvas.delete('heart1')
-            elif lives == 1:
-                canvas.delete('heart2')
-            elif lives == 0:
-                messagebox.showinfo("Lost","You Lost!")
+        if oldValue == 3 and hasKey:
+            arrivedHome = True
     drawGrid()
 
 def move_up(event):
-    global countScore, hasKey,textkey,lives
+    global countScore, hasKey,textkey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
-    if row != 0:
+    if row != 0 and grid[row-1][col] != 3:
         oldValue = grid[row-1][col]
         grid[row][col] = 0
         grid[row-1][col]=1
         if oldValue == 5:
             countScore += 10
-            winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         elif oldValue == 4:
             hasKey = True
             textkey="You can go home now"
-        elif oldValue == 3 and hasKey:
-            messagebox.showinfo("Win","You Win!")
-        elif oldValue == 2:
-            lives -= 1
-            if lives == 2:
-                canvas.delete('heart1')
-            elif lives == 1:
-                canvas.delete('heart2')
-            elif lives == 0:
-                messagebox.showinfo("Lost","You Lost!")
+        if oldValue == 3 and hasKey:
+            arrivedHome = True
     drawGrid()
+def indexOfenemy(grid):
+    indexenemy = []
+    for index in range(len(grid)):
+        for inline in range(len(grid[index])):
+            if grid[index][inline] == 3:
+                indexenemy.append([index,inline])
+    return indexenemy
+
+
+
 
 root.bind('<Left>',move_left) #### keyboard
 root.bind('<Right>',move_right) #### keyboard
