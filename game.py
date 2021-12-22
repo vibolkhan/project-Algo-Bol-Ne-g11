@@ -13,7 +13,7 @@ home = tk.PhotoImage(file='image/home.png')
 key = tk.PhotoImage(file='image/key.png')
 stair=tk.PhotoImage(file="image/stair.png")
 heart_image=tk.PhotoImage(file="image/heart.png")
-dimond =tk.PhotoImage(file="image/dimond.png")
+diamond =tk.PhotoImage(file="image/dimond.png")
 grid = [
     [4,0,0,0,0,0],
     [0,0,2,5,2,0],
@@ -22,6 +22,8 @@ grid = [
     [0,2,5,5,5,0],
     [0,1,0,0,0,3],
 ]
+
+countScore = 0
 
 def drawGrid():
     canvas.delete('all')
@@ -40,7 +42,7 @@ def drawGrid():
     canvas.create_text(540,30,text='Levels: 1 ',font=('Ubuntu',18))
 
 
-    canvas.create_text(70,30,text='Score: ',font=('Ubuntu',18))
+    canvas.create_text(70,30,text='Score: ' + str(countScore),font=('Ubuntu',18))
 
     x=35
     y=60
@@ -57,7 +59,7 @@ def drawGrid():
             elif grid[row][col] == 4:
                 canvas.create_image(x+45,y+45,image = key,anchor='center')  
             elif grid[row][col] == 5:
-                canvas.create_image(x+45,y+45,image = dimond,anchor='center')  
+                canvas.create_image(x+45,y+45,image = diamond,anchor='center')  
                                 
             x+=90
         x=35
@@ -80,37 +82,53 @@ def getColOf1():
     return index
 
 def move_left(event):
+    global countScore
     row = getRowOf1()
     col = getColOf1()
     if col != 0:
+        oldValue = grid[row][col-1]
         grid[row][col] = 0
         grid[row][col-1]=1
+        if oldValue == 5:
+            countScore += 10
     # print(grid)
         drawGrid()
 def move_right(event):
+    global countScore
     row = getRowOf1()
     col = getColOf1()
     if col < len(grid[0])-1:
+        oldValue = grid[row][col+1]
         grid[row][col] = 0
         grid[row][col+1]=1
+        if oldValue == 5:
+            countScore += 10
     # print(grid)
         drawGrid()
 
 def move_down(event):
+    global countScore
     row = getRowOf1()
     col = getColOf1()
     if row < len(grid)-1:
+        oldValue = grid[row+1][col]
         grid[row][col] = 0
         grid[row+1][col]=1
+        if oldValue == 5:
+            countScore += 10
     # print(grid)
         drawGrid()
 
 def move_up(event):
+    global countScore
     row = getRowOf1()
     col = getColOf1()
     if row != 0:
+        oldValue = grid[row-1][col]
         grid[row][col] = 0
         grid[row-1][col]=1
+        if oldValue == 5:
+            countScore += 10
     # print(grid)
         drawGrid()
 
