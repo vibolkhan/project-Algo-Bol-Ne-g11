@@ -6,19 +6,20 @@ frame = tk.Frame()
 frame.master.title('Amazing game')
 canvas = tk.Canvas(frame)
 
-myBackground=tk.PhotoImage(file='backg.png')
-avatar = tk.PhotoImage(file='avatar.png')
-monster = tk.PhotoImage(file='monster.png')
-home = tk.PhotoImage(file='home.png')
-key = tk.PhotoImage(file='key.png')
-stair=tk.PhotoImage(file="stair.png")
-heart_image=tk.PhotoImage(file="heart.png")
+myBackground=tk.PhotoImage(file='image/backg.png')
+avatar = tk.PhotoImage(file='image/avatar.png')
+monster = tk.PhotoImage(file='image/monster.png')
+home = tk.PhotoImage(file='image/home.png')
+key = tk.PhotoImage(file='image/key.png')
+stair=tk.PhotoImage(file="image/stair.png")
+heart_image=tk.PhotoImage(file="image/heart.png")
+dimond =tk.PhotoImage(file="image/dimond.png")
 grid = [
     [4,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,0,0,0,0,0],
-    [0,2,0,0,0,0],
+    [0,0,0,5,0,0],
+    [0,0,5,0,0,0],
+    [0,0,0,5,0,0],
+    [0,2,5,0,0,0],
     [0,1,0,0,0,3],
 ]
 
@@ -54,7 +55,10 @@ def drawGrid():
             elif grid[row][col] == 3:
                 canvas.create_image(x+45,y+45,image = home,anchor='center')
             elif grid[row][col] == 4:
-                canvas.create_image(x+45,y+45,image = key,anchor='center')                      
+                canvas.create_image(x+45,y+45,image = key,anchor='center')  
+            elif grid[row][col] == 5:
+                canvas.create_image(x+45,y+45,image = dimond,anchor='center')  
+                                
             x+=90
         x=35
         y+=90
