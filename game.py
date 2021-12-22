@@ -51,7 +51,7 @@ def drawGrid():
     for row in range(len(grid)):
         for col in range(len(grid[row])):
             if grid[row][col] == 0:
-                canvas.create_rectangle(x,y,x+90,y+90,fill='')#,outline='')
+                canvas.create_rectangle(x,y,x+90,y+90,fill='',outline='')
             elif grid[row][col] == 1:
                 canvas.create_image(x+45,y+45,image = avatar,anchor='center')   
             elif grid[row][col] == 2:
@@ -100,6 +100,7 @@ def move_left(event):
             textkey="You can go home now"
             
         elif oldValue == 3 and hasKey:
+            winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
             messagebox.showinfo("Win","You Win!")
         elif oldValue == 2:
             lives -= 1
@@ -108,6 +109,7 @@ def move_left(event):
             elif lives == 1:
                 canvas.delete('heart2')
             elif lives == 0:
+                winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
                 messagebox.showinfo("Lost","You Lost!")
     drawGrid()
 def move_right(event):
@@ -125,6 +127,7 @@ def move_right(event):
             hasKey = True
             textkey="You can go home now"
         elif oldValue == 3 and hasKey:
+            winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
             messagebox.showinfo("Win","You Win!")
         elif oldValue == 2:
             lives -= 1
@@ -133,6 +136,7 @@ def move_right(event):
             elif lives == 1:
                 canvas.delete('heart2')
             elif lives == 0:
+                winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
                 messagebox.showinfo("Lost","You Lost!")
     drawGrid()
 
@@ -152,7 +156,8 @@ def move_down(event):
             hasKey = True
             textkey="You can go home now"
         elif oldValue == 3 and hasKey:
-           messagebox.showinfo("Win","You Win!")
+            winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+            messagebox.showinfo("Win","You Win!")
         elif oldValue == 2:
             lives -= 1
             if lives == 2:
@@ -160,6 +165,7 @@ def move_down(event):
             elif lives == 1:
                 canvas.delete('heart2')
             elif lives == 0:
+                winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
                 messagebox.showinfo("Lost","You Lost!")
     drawGrid()
 
@@ -178,7 +184,8 @@ def move_up(event):
             hasKey = True
             textkey="You can go home now"
         elif oldValue == 3 and hasKey:
-            messagebox.showinfo("Win","You Win!")
+            winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+            messagebox.showinfo("Win","You Win!")     
         elif oldValue == 2:
             lives -= 1
             if lives == 2:
@@ -186,6 +193,7 @@ def move_up(event):
             elif lives == 1:
                 canvas.delete('heart2')
             elif lives == 0:
+                winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
                 messagebox.showinfo("Lost","You Lost!")
     drawGrid()
 
