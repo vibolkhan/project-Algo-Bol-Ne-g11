@@ -28,7 +28,10 @@ grid = [
 
 countScore = 0
 hasKey = False
+hasNoKey = False
+arrivedHome = False
 lives = 3
+
 def drawGrid():
     canvas.delete('all')
     canvas.create_image(210,310, image=myBackground)
@@ -43,11 +46,25 @@ def drawGrid():
 
 
     canvas.create_text(70,30,text='Score: ' + str(countScore),font=('Ubuntu',18))
+    
 
+    if hasNoKey:
+        textKey = canvas.create_text(300,70,text='You has no key, you need to find key!',font=('Ubuntu',18))
+        # canvas.itemconfig(textKey,text='You has no key, you need to find key')
+        # canvas.delete('textKey')
+    if hasKey and not hasNoKey:
+        textKey = canvas.create_text(300,70,text='You has key, you can go home now!',font=('Ubuntu',18))
+    if hasNoKey and not hasKey:
+        textKey = canvas.create_text(300,70,text='You has no key, you need to find key!',font=('Ubuntu',18))
+    if hasNoKey and hasKey:
+        canvas.itemconfig(textKey,text='You has key, you can go home now!')
     if hasKey:
-        textKey = canvas.create_text(300,70,text='You has key',font=('Ubuntu',18))
-        canvas.after(60,textKey)
-
+        # canvas.delete('textNoKey')
+        textKey = canvas.create_text(300,70,text='You has key, you can go home now!',font=('Ubuntu',18))
+        # canvas.itemconfig(textKey,text='You has key, you can go home now!')
+        # canvas.delete('textKey')
+        # canvas.after(60,textKey)
+    
     x=35
     y=80
     for row in range(len(grid)):
@@ -87,28 +104,29 @@ def getColOf1():
     return index
 
 def move_left(event):
-    global countScore, hasKey,textkey,lives
+    global countScore, hasKey,textkey,lives,hasNoKey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
 
-    if col != 0 and grid[row][col-1] != 3 and grid[row][col-1] != 2:
+    if col != 0 :
         if col != 0:
-            oldValue = grid[row][col-1]
+            currentValue = grid[row][col-1]
             grid[row][col] = 0
             grid[row][col-1]=1
-            if oldValue == 5:
+            if currentValue == 5:
                 countScore += 10
                 winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
-            elif oldValue == 4:
+            elif currentValue == 4:
                 hasKey = True
-                
-            elif oldValue == 3 and hasKey:
+            elif currentValue == 3 and hasKey:
+                arrivedHome = True
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 messagebox.showinfo("Congrats","You Win!")
-            elif oldValue == 3 and not hasKey:
-                oldValue = 3
-                
-            elif oldValue == 2:
+            elif currentValue == 3 and not hasKey:
+                grid[row][col]=1
+                grid[row][col-1] = 3
+                hasNoKey = True
+            elif currentValue == 2:
                 lives -= 1
                 if lives == 2:
                     canvas.delete('heart1')
@@ -119,22 +137,27 @@ def move_left(event):
                     messagebox.showinfo("Lost","You Lost!")
     drawGrid()
 def move_right(event):
-    global countScore, hasKey,textkey,lives
+    global countScore, hasKey,textkey,lives,hasNoKey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
-    if col < len(grid[0])-1 and grid[row][col+1] != 3 and grid[row][col+1] != 2:
-        oldValue = grid[row][col+1]
+    if col < len(grid[0])-1 :
+        currentValue = grid[row][col+1]
         grid[row][col] = 0
         grid[row][col+1]=1
-        if oldValue == 5:
+        if currentValue == 5:
             countScore += 10
             winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
-        elif oldValue == 4:
+        elif currentValue == 4:
             hasKey = True
-        elif oldValue == 3 and hasKey:
+        elif currentValue == 3 and hasKey:
+            arrivedHome = True
             winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
             messagebox.showinfo("Win","You Win!")
-        elif oldValue == 2:
+        elif currentValue == 3 and not hasKey:
+                grid[row][col]=1
+                grid[row][col+1] = 3
+                hasNoKey = True
+        elif currentValue == 2:
             lives -= 1
             if lives == 2:
                 canvas.delete('heart1')
@@ -146,23 +169,28 @@ def move_right(event):
     drawGrid()
 
 def move_down(event):
-    global countScore, hasKey,textkey,lives
+    global countScore, hasKey,textkey,lives,hasNoKey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
     
-    if row < len(grid)-1 and grid[row+1][col] != 3 and grid[row+1][col] != 2:
-        oldValue = grid[row+1][col]
+    if row < len(grid)-1 :
+        currentValue = grid[row+1][col]
         grid[row][col] = 0
         grid[row+1][col]=1
-        if oldValue == 5:
+        if currentValue == 5:
             countScore += 10
             winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
-        elif oldValue == 4:
+        elif currentValue == 4:
             hasKey = True
-        elif oldValue == 3 and hasKey:
+        elif currentValue == 3 and hasKey:
+            arrivedHome = True
             winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
             messagebox.showinfo("Win","You Win!")
-        elif oldValue == 2:
+        elif currentValue == 3 and not hasKey:
+                grid[row][col] = 1
+                grid[row+1][col] = 3
+                hasNoKey = True
+        elif currentValue == 2:
             lives -= 1
             if lives == 2:
                 canvas.delete('heart1')
@@ -174,22 +202,27 @@ def move_down(event):
     drawGrid()
 
 def move_up(event):
-    global countScore, hasKey,textkey,lives
+    global countScore, hasKey,textkey,lives,hasNoKey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
-    if row != 0 and grid[row-1][col] != 3 and grid[row-1][col] != 2:
-        oldValue = grid[row-1][col]
+    if row != 0:
+        currentValue = grid[row-1][col]
         grid[row][col] = 0
         grid[row-1][col]=1
-        if oldValue == 5:
+        if currentValue == 5:
             countScore += 10
             winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
-        elif oldValue == 4:
+        elif currentValue == 4:
             hasKey = True
-        elif oldValue == 3 and hasKey:
+        elif currentValue == 3 and hasKey:
+            arrivedHome = True
             winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
             messagebox.showinfo("Win","You Win!")     
-        elif oldValue == 2:
+        elif currentValue == 3 and not hasKey:
+                grid[row][col] =1
+                grid[row-1][col] = 3
+                hasNoKey = True
+        elif currentValue == 2:
             lives -= 1
             if lives == 2:
                 canvas.delete('heart1')
