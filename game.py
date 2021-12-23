@@ -16,6 +16,7 @@ stair=tk.PhotoImage(file="image/stair.png")
 heart_image=tk.PhotoImage(file="image/heart.png")
 diamond =tk.PhotoImage(file="image/dimond.png")
 congrats = tk.PhotoImage(file='image/congrats.png')
+
 grid = [
     [0,0,4,2,0,5],
     [0,0,4,5,2,0],
@@ -44,7 +45,8 @@ def drawGrid():
     canvas.create_text(70,30,text='Score: ' + str(countScore),font=('Ubuntu',18))
 
     if hasKey:
-        canvas.create_text(300,70,text='You has key',font=('Ubuntu',18))
+        textKey = canvas.create_text(300,70,text='You has key',font=('Ubuntu',18))
+        canvas.after(60,textKey)
 
     x=35
     y=80
@@ -97,11 +99,13 @@ def move_left(event):
             winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         elif oldValue == 4:
             hasKey = True
-            textkey="You can go home now"
             
         elif oldValue == 3 and hasKey:
             winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-            messagebox.showinfo("Win","You Win!")
+            messagebox.showinfo("Congrats","You Win!")
+        elif oldValue == 3 and not hasKey:
+            oldValue = 3
+            
         elif oldValue == 2:
             lives -= 1
             if lives == 2:
@@ -125,7 +129,6 @@ def move_right(event):
             winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         elif oldValue == 4:
             hasKey = True
-            textkey="You can go home now"
         elif oldValue == 3 and hasKey:
             winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
             messagebox.showinfo("Win","You Win!")
@@ -154,7 +157,6 @@ def move_down(event):
             winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         elif oldValue == 4:
             hasKey = True
-            textkey="You can go home now"
         elif oldValue == 3 and hasKey:
             winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
             messagebox.showinfo("Win","You Win!")
@@ -182,7 +184,6 @@ def move_up(event):
             winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         elif oldValue == 4:
             hasKey = True
-            textkey="You can go home now"
         elif oldValue == 3 and hasKey:
             winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
             messagebox.showinfo("Win","You Win!")     
