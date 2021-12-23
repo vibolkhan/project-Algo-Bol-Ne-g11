@@ -90,7 +90,7 @@ def move_left(event):
     global countScore, hasKey,textkey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
-    if col != 0 and grid[row][col-1] != 3:
+    if col != 0 and grid[row][col-1] != 3 and grid[row][col-1] != 2:
         oldValue = grid[row][col-1]
         grid[row][col] = 0
         grid[row][col-1]=1
@@ -107,7 +107,7 @@ def move_right(event):
     global countScore, hasKey,textkey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
-    if col < len(grid[0])-1 and grid[row][col+1] != 3:
+    if col < len(grid[0])-1 and grid[row][col+1] != 3 and grid[row][col+1] != 2:
         oldValue = grid[row][col+1]
         grid[row][col] = 0
         grid[row][col+1]=1
@@ -125,7 +125,7 @@ def move_down(event):
     row = getRowOf1()
     col = getColOf1()
     
-    if row < len(grid)-1 and grid[row+1][col] != 3:
+    if row < len(grid)-1 and grid[row+1][col] != 3 and grid[row+1][col] != 2:
         oldValue = grid[row+1][col]
         grid[row][col] = 0
         grid[row+1][col]=1
@@ -142,7 +142,7 @@ def move_up(event):
     global countScore, hasKey,textkey,arrivedHome
     row = getRowOf1()
     col = getColOf1()
-    if row != 0 and grid[row-1][col] != 3:
+    if row != 0 and grid[row-1][col] != 3 and grid[row-1][col] != 2:
         oldValue = grid[row-1][col]
         grid[row][col] = 0
         grid[row-1][col]=1
