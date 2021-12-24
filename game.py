@@ -118,8 +118,9 @@ def getMonster(grid):
     monster = []
     for row in range(len(grid)):
         for col in range(len(grid[0])):
-            if grid[row][col] == 2:
-                monster.append(row,col)
+            if grid[row][col] == MONSTER_CELL:
+                monster.append(row)
+                monster.append(col)
     return monster
 
 def moveInGrid(grid,monsterY,monsterX):
@@ -135,11 +136,10 @@ def moveInGrid(grid,monsterY,monsterX):
     return moveMonster
 
 def canMove():
-    global grid,moveMonster
     indexEmeny = getMonster(grid)
-    for enemy in indexEmeny:
-        monsterY = enemy[0]
-        monsterX = enemy[1]
+    for moveMonster in indexEmeny:
+        monsterY = monster[0]
+        monsterX = monster[1]
         postionToGo = moveInGrid(grid,monsterX,monsterY)
         if len(postionToGo) > 0:
             moveMonster = random.choice(postionToGo)
@@ -159,7 +159,7 @@ def canMove():
                 if grid[monsterY+1][monsterX] == DIAMOND_CELL and grid[monsterY+1][monsterX] != PLAYER_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
                     grid[monsterY+1][monsterX] = MONSTER_CELL
-    canvas.delete("all")                
+    # canvas.delete("all")                
     drawGrid()
     canvas.after(500,canMove)
 canvas.after(500,canMove)
