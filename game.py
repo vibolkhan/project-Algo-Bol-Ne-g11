@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import winsound
 root = tk.Tk() 
-root.geometry("760x650")
+root.geometry("770x650")
 frame = tk.Frame()
 frame.master.title('Amazing game')
 canvas = tk.Canvas(frame)
@@ -25,7 +25,7 @@ MONSTER_CELL = 2
 HOME_CELL = 3
 KEY_CELL = 4
 DIAMOND_CELL = 5
-STAIR_CELL = 6
+WALL_CELL = 6
 # ---------------------------------------
 
 # ---------------------------------------
@@ -41,19 +41,23 @@ hasNoKey = False
 end = False
 # -------------------------------------------
 grid = [
-    [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-    [6,2,4,2,0,0,0,0,0,0,5,0,0,0,0,0,0,6],
-    [6,0,6,6,6,6,6,6,0,0,0,0,0,0,0,0,0,6],
-    [6,5,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,6],
-    [6,0,4,0,0,0,0,6,6,6,6,6,0,0,0,0,0,6],
-    [6,0,0,0,2,0,0,5,0,0,0,5,0,0,0,0,0,6],
-    [6,0,6,6,6,6,6,6,0,0,0,6,6,6,6,6,0,6],
-    [6,0,0,0,0,0,2,0,0,0,0,5,0,0,0,0,0,6],
-    [6,0,0,0,0,0,0,6,6,6,6,6,0,0,0,0,0,6],
-    [6,0,0,0,0,0,5,0,0,0,0,2,0,0,0,0,0,6],
-    [6,0,6,6,6,6,6,6,0,0,5,0,6,6,6,6,0,6],
-    [6,1,5,2,0,0,0,0,0,0,5,0,0,0,0,0,3,6],
-    [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
+    [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
+    [6,2,0,2,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,5,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,0,0,2,0,0,5,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,0,0,0,0,2,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,0,0,0,0,5,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,1,5,2,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,5,2,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,5,2,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
 
 ]    
 
@@ -64,7 +68,7 @@ heart3 = canvas.create_image(460,30,image=heart_image)
 def drawGrid():
     canvas.delete('all')
     canvas.create_image(380,320, image=myBackground)
-    canvas.create_text(330,30,text='Lives: '+ ,font=('Ubuntu',18))
+    canvas.create_text(330,30,text='Lives: ',font=('Ubuntu',18))
 
 
 
@@ -82,27 +86,27 @@ def drawGrid():
         textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Ubuntu',18))
 
     
-    x=25
+    x=10
     y=100
     for row in range(len(grid)):
         for col in range(len(grid[row])):
             if grid[row][col] == 0:
-                canvas.create_rectangle(x,y,x+40,y+40,fill='',outline="")
+                canvas.create_rectangle(x,y,x+30,y+30,fill='',outline="")
             elif grid[row][col] == 1:
-                canvas.create_image(x+20,y+20,image = avatar,anchor='center')   
+                canvas.create_image(x+15,y+15,image = avatar,anchor='center')   
             elif grid[row][col] == 2:
-                canvas.create_image(x+20,y+20,image = monster,anchor='center')      
+                canvas.create_image(x+15,y+15,image = monster,anchor='center')      
             elif grid[row][col] == 3:
-                canvas.create_image(x+20,y+20,image = home,anchor='center')
+                canvas.create_image(x+15,y+15,image = home,anchor='center')
             elif grid[row][col] == 4:
-                canvas.create_image(x+20,y+20,image = key,anchor='center')  
+                canvas.create_image(x+15,y+15,image = key,anchor='center')  
             elif grid[row][col] == 5:
-                canvas.create_image(x+20,y+20,image = diamond,anchor='center') 
+                canvas.create_image(x+15,y+15,image = diamond,anchor='center') 
             elif grid[row][col]== 6:
-                canvas.create_image(x+20,y+20,image= wall,anchor='center')           
-            x+=40
-        x=25
-        y+=40
+                canvas.create_image(x+15,y+15,image= wall,anchor='center')           
+            x+=30
+        x=10
+        y+=30
 
 drawGrid()
 
@@ -127,71 +131,71 @@ def move(moveX, moveY) :
     playerY = getPlayerY()
     newPlayerX = playerX + moveX
     newPlayerY = playerY + moveY 
-    
-    if grid[newPlayerY][newPlayerX] == DIAMOND_CELL: # count score
-            score += 10 
-            winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
+    if grid[newPlayerY][newPlayerX] != WALL_CELL :
+        if grid[newPlayerY][newPlayerX] == DIAMOND_CELL: # count score
+                score += 10 
+                winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
 
-    if grid[newPlayerY][newPlayerX] == MONSTER_CELL: # count lives
-        lives -= 1
-        winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
-        if lives == 0:
-            messagebox.showinfo("Lost","You Lost this game!")
-    if moveX == 1 and moveY == 0: # move right
-        if grid[newPlayerY][newPlayerX] == KEY_CELL:
-            hasKey = True
-        if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-            winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-            messagebox.showinfo("Congrats","You Win!")
-        if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-            grid[playerY][playerX] = PLAYER_CELL
-            grid[newPlayerY][newPlayerX] = HOME_CELL
-            hasNoKey = True
-        elif newPlayerX < len(grid[0]):
-            grid[playerY][playerX] = EMPTY_CELL
-            grid[newPlayerY][newPlayerX] = PLAYER_CELL
-            
-    elif moveX == -1 and moveY == 0: # move left
-        if grid[newPlayerY][newPlayerX] == KEY_CELL:
-            hasKey = True
-        if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-            winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-            messagebox.showinfo("Congrats","You Win!")
-        if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-            grid[playerY][playerX] = PLAYER_CELL
-            grid[newPlayerY][newPlayerX] = HOME_CELL
-            hasNoKey = True
-        elif newPlayerX >= 0:
-            grid[playerY][playerX] = EMPTY_CELL
-            grid[newPlayerY][newPlayerX] = PLAYER_CELL
+        if grid[newPlayerY][newPlayerX] == MONSTER_CELL: # count lives
+            lives -= 1
+            winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
+            if lives == 0:
+                messagebox.showinfo("Lost","You Lost this game!")
+        if moveX == 1 and moveY == 0: # move right
+            if grid[newPlayerY][newPlayerX] == KEY_CELL:
+                hasKey = True
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                messagebox.showinfo("Congrats","You Win!")
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+                grid[playerY][playerX] = PLAYER_CELL
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                hasNoKey = True
+            elif newPlayerX < len(grid[0]):
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = PLAYER_CELL
+                
+        elif moveX == -1 and moveY == 0: # move left
+            if grid[newPlayerY][newPlayerX] == KEY_CELL:
+                hasKey = True
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                messagebox.showinfo("Congrats","You Win!")
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+                grid[playerY][playerX] = PLAYER_CELL
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                hasNoKey = True
+            elif newPlayerX >= 0:
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = PLAYER_CELL
 
-    elif moveX == 0 and moveY == 1: # move down
-        if grid[newPlayerY][newPlayerX] == KEY_CELL:
-            hasKey = True
-        if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-            winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-            messagebox.showinfo("Congrats","You Win!")
-        if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-            grid[playerY][playerX] = PLAYER_CELL
-            grid[newPlayerY][newPlayerX] = HOME_CELL
-            hasNoKey = True
-        elif newPlayerY < len(grid):
-            grid[playerY][playerX] = EMPTY_CELL
-            grid[newPlayerY][newPlayerX] = PLAYER_CELL
+        elif moveX == 0 and moveY == 1: # move down
+            if grid[newPlayerY][newPlayerX] == KEY_CELL:
+                hasKey = True
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                messagebox.showinfo("Congrats","You Win!")
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+                grid[playerY][playerX] = PLAYER_CELL
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                hasNoKey = True
+            elif newPlayerY < len(grid):
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = PLAYER_CELL
 
-    elif moveX == 0 and moveY == -1: #move up
-        if grid[newPlayerY][newPlayerX] == KEY_CELL:
-            hasKey = True
-        if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-            winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-            messagebox.showinfo("Congrats","You Win!")
-        if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-            grid[playerY][playerX] = PLAYER_CELL
-            grid[newPlayerY][newPlayerX] = HOME_CELL
-            hasNoKey = True
-        elif newPlayerY >= 0:
-            grid[playerY][playerX] = EMPTY_CELL
-            grid[newPlayerY][newPlayerX] = PLAYER_CELL
+        elif moveX == 0 and moveY == -1: #move up
+            if grid[newPlayerY][newPlayerX] == KEY_CELL:
+                hasKey = True
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                messagebox.showinfo("Congrats","You Win!")
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+                grid[playerY][playerX] = PLAYER_CELL
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                hasNoKey = True
+            elif newPlayerY >= 0:
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = PLAYER_CELL
     
     drawGrid()
 
