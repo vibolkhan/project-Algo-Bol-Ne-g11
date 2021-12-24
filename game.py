@@ -91,7 +91,7 @@ def drawGrid():
     for row in range(len(grid)):
         for col in range(len(grid[row])):
             if grid[row][col] == 0:
-                canvas.create_rectangle(x,y,x+30,y+30,fill='',outline="")
+                canvas.create_rectangle(x,y,x+30,y+30,fill='')
             elif grid[row][col] == 1:
                 canvas.create_image(x+15,y+15,image = avatar,anchor='center')   
             elif grid[row][col] == 2:
