@@ -120,7 +120,6 @@ def getMonster(grid):
         for col in range(len(grid[0])):
             if grid[row][col] == MONSTER_CELL:
                 monster.append(row)
-                monster.append(col)
     return monster
 
 def moveInGrid(grid,monsterY,monsterX):
