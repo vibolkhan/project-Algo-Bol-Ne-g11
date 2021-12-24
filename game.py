@@ -38,7 +38,7 @@ score = 0
 #Boolean
 hasKey = False
 hasNoKey = False
-arrivedHome = False
+end = False
 # -------------------------------------------
 grid = [
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
@@ -55,17 +55,18 @@ grid = [
     [6,1,5,2,0,0,0,0,0,0,5,0,0,0,0,0,3,6],
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
 
-]
+]    
+
+heart1 = canvas.create_image(380,30,image=heart_image)
+heart2 = canvas.create_image(420,30,image=heart_image)
+heart3 = canvas.create_image(460,30,image=heart_image)
 
 def drawGrid():
     canvas.delete('all')
     canvas.create_image(380,320, image=myBackground)
-    
-    canvas.create_text(330,30,text='Lives: ',font=('Ubuntu',18))
+    canvas.create_text(330,30,text='Lives: '+ ,font=('Ubuntu',18))
 
-    heart1 = canvas.create_image(380,30,image=heart_image)
-    heart2 = canvas.create_image(420,30,image=heart_image)
-    heart3 = canvas.create_image(460,30,image=heart_image)
+
 
     canvas.create_text(620,30,text='Levels: 1 ',font=('Ubuntu',18))
 
@@ -121,7 +122,7 @@ def getPlayerX():
 
 # move
 def move(moveX, moveY) :
-    global lives,score,hasNoKey,hasKey
+    global lives,score,hasNoKey,hasKey,end
     playerX = getPlayerX()
     playerY = getPlayerY()
     newPlayerX = playerX + moveX
@@ -134,6 +135,8 @@ def move(moveX, moveY) :
     if grid[newPlayerY][newPlayerX] == MONSTER_CELL: # count lives
         lives -= 1
         winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
+        if lives == 0:
+            messagebox.showinfo("Lost","You Lost this game!")
     if moveX == 1 and moveY == 0: # move right
         if grid[newPlayerY][newPlayerX] == KEY_CELL:
             hasKey = True
