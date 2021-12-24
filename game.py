@@ -64,7 +64,7 @@ heart3 = canvas.create_image(460,30,image=heart_image)
 def drawGrid():
     canvas.delete('all')
     canvas.create_image(380,320, image=myBackground)
-    canvas.create_text(330,30,text='Lives: '+ ,font=('Ubuntu',18))
+    canvas.create_text(330,30,text='Lives: ',font=('Ubuntu',18))
 
 
 
