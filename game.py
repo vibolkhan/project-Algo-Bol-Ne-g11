@@ -1,6 +1,8 @@
+from math import trunc
 import tkinter as tk
 from tkinter import messagebox
 import winsound
+import random
 root = tk.Tk() 
 root.geometry("770x650")
 frame = tk.Frame()
@@ -44,21 +46,21 @@ end = False
 # -------------------------------------------
 grid = [
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-    [6,2,0,0,0,0,0,0,0,6,5,0,0,6,0,0,0,0,0,0,6,0,0,0,6],
-    [6,6,0,6,6,0,6,6,6,6,0,6,0,6,6,6,0,0,0,0,6,0,0,0,6],
-    [6,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,6],
-    [6,0,4,0,0,0,0,0,0,6,6,6,6,6,6,6,0,6,6,6,6,0,6,0,6],
-    [6,0,6,6,6,0,0,5,0,0,0,5,6,0,0,0,0,0,0,0,6,0,6,0,6],
-    [6,0,0,0,0,0,0,6,0,0,0,0,6,0,0,0,0,6,0,0,6,0,0,0,6],
-    [6,6,6,6,0,6,2,6,0,0,0,5,6,0,0,0,0,6,0,0,6,0,0,0,6],
-    [6,0,0,0,0,6,0,6,0,0,0,0,0,0,0,0,0,6,0,0,6,6,6,0,6],
-    [6,0,6,6,6,6,5,6,6,6,6,0,1,0,6,6,6,6,0,0,0,0,0,0,6],
-    [6,0,0,0,0,0,0,6,0,0,5,0,0,0,0,0,0,6,0,0,6,0,0,0,6],
-    [6,0,6,6,6,6,0,6,0,0,5,0,6,0,0,0,0,6,0,0,6,0,6,0,6],
-    [6,0,0,0,0,6,0,6,0,0,0,0,6,0,0,0,0,6,0,0,6,0,6,0,6],
-    [6,0,6,6,0,6,0,0,0,0,5,0,6,0,0,0,0,0,0,0,6,0,6,0,6],
-    [6,0,6,6,0,6,0,0,0,6,6,6,6,6,6,6,0,6,6,6,6,0,0,0,6],
-    [6,0,5,2,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,6],
+    [6,0,5,5,5,5,5,5,5,6,5,5,5,6,5,5,5,5,5,5,6,5,5,0,6],
+    [6,6,0,6,6,5,6,6,6,6,5,6,0,6,6,6,5,5,5,5,6,5,3,5,6],
+    [6,5,5,5,5,0,5,5,5,5,5,5,5,5,5,5,0,5,5,5,5,5,6,5,6],
+    [6,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,5,6,5,6],
+    [6,5,6,6,6,5,5,5,5,5,5,5,6,5,5,5,5,5,5,5,6,5,6,5,6],
+    [6,5,5,5,5,5,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,5,5,6],
+    [6,5,6,6,5,6,0,6,5,5,5,5,6,5,5,5,5,6,5,5,6,0,5,5,6],
+    [6,5,5,5,5,6,5,6,5,0,5,5,5,5,5,5,5,6,5,5,6,6,6,5,6],
+    [6,5,6,6,6,6,5,6,6,6,6,5,1,5,6,6,6,6,5,5,0,5,5,5,6],
+    [6,5,5,0,5,5,5,6,5,5,5,5,5,5,5,5,5,6,5,5,6,5,5,5,6],
+    [6,5,6,6,6,6,5,6,5,0,5,5,6,5,5,5,5,6,5,5,6,5,6,5,6],
+    [6,5,5,5,5,6,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,6,5,6],
+    [6,5,6,6,5,6,5,5,5,5,5,5,6,5,5,5,0,5,5,5,6,5,6,5,6],
+    [6,5,6,6,5,6,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,5,5,5,6],
+    [6,4,5,0,5,5,5,5,5,5,5,5,5,5,5,5,2,5,5,5,5,5,5,5,6],
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
 
 ]    
@@ -71,8 +73,6 @@ def drawGrid():
     canvas.delete('all')
     canvas.create_image(380,320, image=myBackground)
     canvas.create_text(330,30,text='Lives: ',font=('Ubuntu',18))
-
-
 
     canvas.create_text(620,30,text='Levels: 1 ',font=('Ubuntu',18))
 
@@ -93,7 +93,7 @@ def drawGrid():
     for row in range(len(grid)):
         for col in range(len(grid[row])):
             if grid[row][col] == 0:
-                canvas.create_rectangle(x,y,x+30,y+30,fill='')
+                canvas.create_rectangle(x,y,x+30,y+30,fill='',outline='')
             elif grid[row][col] == 1:
                 canvas.create_image(x+15,y+15,image = avatar,anchor='center')   
             elif grid[row][col] == 2:
@@ -110,6 +110,59 @@ def drawGrid():
         x=10
         y+=30
 
+drawGrid()
+
+# ----------------------------------move monster
+
+def getMonster(grid):
+    monster = []
+    for row in range(len(grid)):
+        for col in range(len(grid[0])):
+            if grid[row][col] == 2:
+                monster.append(row,col)
+    return monster
+
+def moveInGrid(grid,monsterY,monsterX):
+    moveMonster = []
+    if grid[monsterY][monsterX-1] == DIAMOND_CELL and grid[monsterY][monsterX-1] != MONSTER_CELL:
+        moveMonster.append('left')
+    if grid[monsterY][monsterX+1] == DIAMOND_CELL and grid[monsterY][monsterX+1] != MONSTER_CELL :
+        moveMonster.append('right')
+    if grid[monsterY-1][monsterX] == DIAMOND_CELL and grid[monsterY-1][monsterX] != MONSTER_CELL:
+        moveMonster.append('up')
+    if grid[monsterY+1][monsterX] == DIAMOND_CELL and grid[monsterY+1][monsterX] != MONSTER_CELL :
+        moveMonster.append('down')
+    return moveMonster
+
+def canMove():
+    global grid,moveMonster
+    indexEmeny = getMonster(grid)
+    for enemy in indexEmeny:
+        monsterY = enemy[0]
+        monsterX = enemy[1]
+        postionToGo = moveInGrid(grid,monsterX,monsterY)
+        if len(postionToGo) > 0:
+            moveMonster = random.choice(postionToGo)
+            if moveMonster == 'left':
+                if grid[monsterY][monsterX-1] == DIAMOND_CELL and grid[monsterY][monsterX-1] != PLAYER_CELL:
+                    grid[monsterY][monsterX] = DIAMOND_CELL
+                    grid[monsterY][monsterX-1] = MONSTER_CELL
+            if moveMonster == 'right':
+                if grid[monsterY][monsterX+1] == DIAMOND_CELL and grid[monsterY][monsterX+1] != PLAYER_CELL:
+                    grid[monsterY][monsterX] = DIAMOND_CELL
+                    grid[monsterY][monsterX+1] = MONSTER_CELL
+            if moveMonster == 'up':
+                if grid[monsterY-1][monsterX] == DIAMOND_CELL and grid[monsterY-1-1][monsterX] != PLAYER_CELL:
+                    grid[monsterY][monsterX] = DIAMOND_CELL
+                    grid[monsterY-1][monsterX] = MONSTER_CELL
+            if moveMonster == 'down':
+                if grid[monsterY+1][monsterX] == DIAMOND_CELL and grid[monsterY+1][monsterX] != PLAYER_CELL:
+                    grid[monsterY][monsterX] = DIAMOND_CELL
+                    grid[monsterY+1][monsterX] = MONSTER_CELL
+    canvas.delete("all")                
+    drawGrid()
+    canvas.after(500,canMove)
+canvas.after(500,canMove)
 drawGrid()
 
 def getPlayerY():
