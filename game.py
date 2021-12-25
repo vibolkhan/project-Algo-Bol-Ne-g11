@@ -46,6 +46,7 @@ hasKey = False
 hasNoKey = False
 end = False
 isWin = False
+restartGame = False
 # -------------------------------------------
 grid = [
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
@@ -68,7 +69,7 @@ grid = [
 
 ]    
 
-
+#12,9
 
 def drawGrid():
     global end
@@ -86,7 +87,6 @@ def drawGrid():
     elif lives == 1:
         deleteHeart(heart2)
     elif lives <= 0:
-        deleteHeart(heart1)
         end = True
     if hasNoKey:
         textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18))
@@ -125,7 +125,6 @@ def drawGrid():
 # deledt heart
 def deleteHeart(heart):
     canvas.delete('heart')
-
 
 # ----------------------------------move monster
 
@@ -167,7 +166,6 @@ def canMove():
                     grid[monsterY][monsterX-1] = MONSTER_CELL
                 elif grid[monsterY][monsterX-1] == PLAYER_CELL and lives >= 0:
                     lives -= 1
-                    # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
             if moveMonster == 'right':
                 if grid[monsterY][monsterX+1] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -176,9 +174,7 @@ def canMove():
                     grid[monsterY][monsterX] = EMPTY_CELL
                     grid[monsterY][monsterX+1] = MONSTER_CELL
                 elif grid[monsterY][monsterX+1] == PLAYER_CELL and lives >= 0:
-                    lives -= 1
-                    # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
-                    
+                    lives -= 1 
             if moveMonster == 'up':
                 if grid[monsterY-1][monsterX] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -188,7 +184,6 @@ def canMove():
                     grid[monsterY-1][monsterX] = MONSTER_CELL
                 elif grid[monsterY-1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -= 1
-                    # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
             if moveMonster == 'down':
                 if grid[monsterY+1][monsterX] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -198,10 +193,16 @@ def canMove():
                     grid[monsterY+1][monsterX] = MONSTER_CELL
                 elif grid[monsterY+1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -=1
-                    # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)              
     drawGrid()
     canvas.after(300,canMove)
 canvas.after(300,canMove)
+
+# restart game
+def restartGame():
+    if lives >= 0:
+        grid[12][9]=PLAYER_CELL
+        drawGrid()
+
 
 
 def getPlayerY():
@@ -219,7 +220,6 @@ def getPlayerX():
     return index
 
 # end game
-
 def getStatus():
     global grid
     grid=[]
@@ -228,15 +228,6 @@ def getStatus():
         canvas.create_image(380,320, image=lostGame)  
     elif end and isWin:
         canvas.create_image(380,320, image=congrats)
-    
-
-# def getStatus():
-#     global grid
-#     grid=[]
-#     if end and not isWin:
-#         canvas.create_image(380,320, image=lostGame)
-#     elif isWin:
-#         canvas.create_image(380,320, image=congrats)
 
 # move player
 def move(moveX, moveY) :
@@ -251,10 +242,9 @@ def move(moveX, moveY) :
                 winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL and lives >= 0: # count lives
             lives -= 1
-           
             if lives == 0:
                 end = True
-                winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
+                winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
         if moveX == 1 and moveY == 0: # move right
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
