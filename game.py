@@ -37,6 +37,7 @@ WALL_CELL = 6
 lives = 3
 score = 0
 tomove=[]
+
 # ---------------------------------------
 
 # -------------------------------------------
@@ -44,51 +45,60 @@ tomove=[]
 hasKey = False
 hasNoKey = False
 end = False
+isWin = False
 # -------------------------------------------
 grid = [
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-    [6,0,5,5,5,5,5,5,5,6,5,5,5,6,5,5,2,5,5,5,6,5,5,0,6],
-    [6,6,0,6,6,5,6,6,6,6,5,6,0,6,6,6,5,5,2,5,6,5,3,5,6],
-    [6,2,5,5,5,0,5,5,5,5,5,5,5,5,5,5,0,5,5,5,5,5,6,2,6],
+    [6,5,5,5,5,5,5,5,5,6,5,5,5,6,5,5,2,5,5,5,6,5,5,5,6],
+    [6,6,5,6,6,5,6,6,6,6,5,6,5,6,6,6,5,5,5,5,6,5,3,5,6],
+    [6,2,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,2,6],
     [6,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,5,6,5,6],
-    [6,5,6,6,6,5,2,5,5,5,5,5,6,5,5,5,5,2,5,5,6,5,6,5,6],
-    [6,5,5,5,5,5,5,6,5,2,5,5,6,5,2,5,5,6,5,2,6,5,5,5,6],
-    [6,5,6,6,5,6,0,6,5,5,5,5,6,5,0,5,5,6,5,5,6,0,5,5,6],
-    [6,2,5,5,5,6,5,6,5,5,2,5,5,5,2,5,5,6,5,5,6,6,6,5,6],
-    [6,5,6,6,6,6,5,6,6,6,6,5,1,5,6,6,6,6,5,5,0,5,5,5,6],
-    [6,5,5,0,5,5,2,6,5,5,2,5,5,5,5,5,5,6,5,5,6,5,5,2,6],
-    [6,5,6,6,6,6,5,6,5,0,5,5,6,5,2,5,5,6,5,5,6,5,6,5,6],
+    [6,5,6,6,6,5,2,5,5,5,5,5,6,5,5,5,5,5,5,5,6,5,6,5,6],
+    [6,5,5,5,5,5,5,6,5,5,5,5,6,5,2,5,5,6,5,5,6,5,5,5,6],
+    [6,5,6,6,5,6,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,5,5,6],
+    [6,2,5,5,5,6,5,6,5,5,2,5,5,5,5,5,5,6,5,5,6,6,6,5,6],
+    [6,5,6,6,6,6,5,6,6,6,6,5,1,5,6,6,6,6,5,5,5,5,5,5,6],
+    [6,5,5,5,5,5,5,6,5,5,5,5,5,5,5,5,5,6,5,5,6,5,5,5,6],
+    [6,5,6,6,6,6,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,6,5,6],
     [6,5,5,5,5,6,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,6,5,6],
-    [6,2,6,6,5,6,2,5,5,5,2,5,6,5,5,5,2,5,2,5,6,5,6,5,6],
-    [6,5,6,6,5,6,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,2,5,5,6],
-    [6,4,5,0,5,5,5,5,5,5,2,5,5,5,5,5,2,5,5,5,5,5,5,5,6],
+    [6,2,6,6,5,6,2,5,5,5,5,5,6,5,5,5,5,5,5,5,6,5,6,5,6],
+    [6,5,6,6,5,6,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,5,5,5,6],
+    [6,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,2,5,5,5,5,5,5,5,6],
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
 
 ]    
 
-heart1 = canvas.create_image(380,30,image=heart_image)
-heart2 = canvas.create_image(420,30,image=heart_image)
-heart3 = canvas.create_image(460,30,image=heart_image)
+
 
 def drawGrid():
+    global end
     canvas.delete('all')
     canvas.create_image(380,320, image=myBackground)
-    canvas.create_text(330,30,text='Lives: ',font=('Ubuntu',18))
+    canvas.create_text(330,30,text='Lives: ',font=('Arial',18))
+    heart1 = canvas.create_image(380,30,image=heart_image)
+    heart2 = canvas.create_image(420,30,image=heart_image)
+    heart3 = canvas.create_image(460,30,image=heart_image)
+    canvas.create_text(620,30,text='Levels: 1 ',font=('Arial',18))
 
-    canvas.create_text(620,30,text='Levels: 1 ',font=('Ubuntu',18))
-
-    canvas.create_text(150,30,text='Score: ' + str(score),font=('Ubuntu',18))
-
+    canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18))
+    if lives == 2:
+        deleteHeart(heart3)
+    elif lives == 1:
+        deleteHeart(heart2)
+    elif lives <= 0:
+        deleteHeart(heart1)
+        end = True
     if hasNoKey:
-        textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Ubuntu',18))
+        textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18))
     if hasKey and not hasNoKey:
-        textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Ubuntu',18))
+        textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18))
     if hasNoKey and hasKey:
         canvas.itemconfig(textKey,text='You has key, you can go home now!')
     if hasKey:
-        textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Ubuntu',18))
+        textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18))
 
-    
+    if end:
+        getStatus()
     x=10
     y=100
     for row in range(len(grid)):
@@ -110,8 +120,12 @@ def drawGrid():
             x+=30
         x=10
         y+=30
+    print(lives)
 
-drawGrid()
+# deledt heart
+def deleteHeart(heart):
+    canvas.delete('heart')
+
 
 # ----------------------------------move monster
 
@@ -125,13 +139,13 @@ def getMonster(grid):
 
 def moveInGrid(grid,monsterY,monsterX):
     moveMonster = []
-    if (grid[monsterY][monsterX-1] == DIAMOND_CELL or grid[monsterY][monsterX-1] == EMPTY_CELL or grid[monsterY][monsterX-1] == PLAYER_CELL) and grid[monsterY][monsterX-1] != WALL_CELL:
+    if (grid[monsterY][monsterX-1] == DIAMOND_CELL or grid[monsterY][monsterX-1] == PLAYER_CELL) and grid[monsterY][monsterX-1] != WALL_CELL:
         moveMonster.append('left')
-    if (grid[monsterY][monsterX+1] == DIAMOND_CELL  or grid[monsterY][monsterX+1] == EMPTY_CELL or grid[monsterY][monsterX+1] == PLAYER_CELL) and grid[monsterY][monsterX+1] != WALL_CELL :
+    if (grid[monsterY][monsterX+1] == DIAMOND_CELL or grid[monsterY][monsterX+1] == PLAYER_CELL) and grid[monsterY][monsterX+1] != WALL_CELL :
         moveMonster.append('right')
-    if (grid[monsterY-1][monsterX] == DIAMOND_CELL or grid[monsterY-1][monsterX] == EMPTY_CELL or grid[monsterY-1][monsterX] == PLAYER_CELL) and grid[monsterY-1][monsterX] != WALL_CELL:
+    if (grid[monsterY-1][monsterX] == DIAMOND_CELL or grid[monsterY-1][monsterX] == PLAYER_CELL) and grid[monsterY-1][monsterX] != WALL_CELL:
         moveMonster.append('up')
-    if (grid[monsterY+1][monsterX] == DIAMOND_CELL or grid[monsterY+1][monsterX] == EMPTY_CELL or grid[monsterY+1][monsterX] == PLAYER_CELL) and grid[monsterY+1][monsterX] != WALL_CELL :
+    if (grid[monsterY+1][monsterX] == DIAMOND_CELL or grid[monsterY+1][monsterX] == PLAYER_CELL) and grid[monsterY+1][monsterX] != WALL_CELL :
         moveMonster.append('down')
     return moveMonster
 
@@ -151,7 +165,7 @@ def canMove():
                 elif grid[monsterY][monsterX-1] == EMPTY_CELL:
                     grid[monsterY][monsterX] = EMPTY_CELL
                     grid[monsterY][monsterX-1] = MONSTER_CELL
-                elif grid[monsterY][monsterX-1] == PLAYER_CELL:
+                elif grid[monsterY][monsterX-1] == PLAYER_CELL and lives >= 0:
                     lives -= 1
                     # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
             if moveMonster == 'right':
@@ -161,7 +175,7 @@ def canMove():
                 elif grid[monsterY][monsterX+1] == EMPTY_CELL:
                     grid[monsterY][monsterX] = EMPTY_CELL
                     grid[monsterY][monsterX+1] = MONSTER_CELL
-                elif grid[monsterY][monsterX+1] == PLAYER_CELL:
+                elif grid[monsterY][monsterX+1] == PLAYER_CELL and lives >= 0:
                     lives -= 1
                     # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
                     
@@ -172,7 +186,7 @@ def canMove():
                 elif grid[monsterY-1][monsterX] == EMPTY_CELL:
                     grid[monsterY][monsterX] = EMPTY_CELL
                     grid[monsterY-1][monsterX] = MONSTER_CELL
-                elif grid[monsterY-1][monsterX] == PLAYER_CELL:
+                elif grid[monsterY-1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -= 1
                     # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
             if moveMonster == 'down':
@@ -182,14 +196,13 @@ def canMove():
                 elif grid[monsterY+1][monsterX] == EMPTY_CELL:
                     grid[monsterY][monsterX] = EMPTY_CELL
                     grid[monsterY+1][monsterX] = MONSTER_CELL
-                elif grid[monsterY+1][monsterX] == PLAYER_CELL:
+                elif grid[monsterY+1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -=1
-                    # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
-    canvas.delete("all")                
+                    # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)              
     drawGrid()
-    canvas.after(100,canMove)
-canvas.after(100,canMove)
-drawGrid()
+    canvas.after(300,canMove)
+canvas.after(300,canMove)
+
 
 def getPlayerY():
     for row in range(len(grid)):
@@ -207,15 +220,27 @@ def getPlayerX():
 
 # end game
 
-def endGame():
-    global grid 
-    grid = []
-    drawGrid()
+def getStatus():
+    global grid
+    grid=[]
+    canvas.create_image(380,320, image=myBackground)
+    if end and not isWin:
+        canvas.create_image(380,320, image=lostGame)  
+    elif end and isWin:
+        canvas.create_image(380,320, image=congrats)
+    
 
+# def getStatus():
+#     global grid
+#     grid=[]
+#     if end and not isWin:
+#         canvas.create_image(380,320, image=lostGame)
+#     elif isWin:
+#         canvas.create_image(380,320, image=congrats)
 
-# move
+# move player
 def move(moveX, moveY) :
-    global lives,score,hasNoKey,hasKey,end
+    global lives,score,hasNoKey,hasKey,end,isWin
     playerX = getPlayerX()
     playerY = getPlayerY()
     newPlayerX = playerX + moveX
@@ -224,20 +249,19 @@ def move(moveX, moveY) :
         if grid[newPlayerY][newPlayerX] == DIAMOND_CELL: # count score
                 score += 10 
                 winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
-
-        if grid[newPlayerY][newPlayerX] == MONSTER_CELL: # count lives
+        if grid[newPlayerY][newPlayerX] == MONSTER_CELL and lives >= 0: # count lives
             lives -= 1
-            # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
+           
             if lives == 0:
                 end = True
-                messagebox.showinfo("Lost","You Lost this game!")
+                winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
         if moveX == 1 and moveY == 0: # move right
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
             if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-                messagebox.showinfo("Congrats","You Win!")
                 end = True
+                isWin = True
             if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
@@ -251,7 +275,8 @@ def move(moveX, moveY) :
                 hasKey = True
             if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-                messagebox.showinfo("Congrats","You Win!")
+                end = True
+                isWin = True
             if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
@@ -265,7 +290,8 @@ def move(moveX, moveY) :
                 hasKey = True
             if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-                messagebox.showinfo("Congrats","You Win!")
+                end = True
+                isWin = True
             if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
@@ -273,13 +299,13 @@ def move(moveX, moveY) :
             elif newPlayerY < len(grid):
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
-
         elif moveX == 0 and moveY == -1: #move up
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
             if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-                messagebox.showinfo("Congrats","You Win!")
+                end = True
+                isWin = True    
             if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
@@ -287,9 +313,7 @@ def move(moveX, moveY) :
             elif newPlayerY >= 0:
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
-    
     drawGrid()
-
 # --------------------------------------
 # MOVE POSITION
 def move_right(event):
