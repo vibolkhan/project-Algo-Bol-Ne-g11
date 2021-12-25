@@ -1,6 +1,6 @@
 from math import trunc
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import PhotoImage, messagebox
 import winsound
 import random
 root = tk.Tk() 
@@ -20,7 +20,7 @@ wall=tk.PhotoImage(file="image/wall.png")
 heart_image=tk.PhotoImage(file="image/heart.png")
 diamond =tk.PhotoImage(file="image/diamond.png")
 congrats = tk.PhotoImage(file='image/congrats.png')
-
+lostGame = tk.PhotoImage(file='image/gameover.png')
 # ---------------------------------------
 # CONSTANTS
 EMPTY_CELL = 0
@@ -47,21 +47,21 @@ end = False
 # -------------------------------------------
 grid = [
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-    [6,0,5,5,5,5,5,5,5,6,5,5,5,6,5,5,5,5,5,5,6,5,5,0,6],
-    [6,6,0,6,6,5,6,6,6,6,5,6,0,6,6,6,5,5,5,5,6,5,3,5,6],
-    [6,5,5,5,5,0,5,5,5,5,5,5,5,5,5,5,0,5,5,5,5,5,6,5,6],
+    [6,0,5,5,5,5,5,5,5,6,5,5,5,6,5,5,2,5,5,5,6,5,5,0,6],
+    [6,6,0,6,6,5,6,6,6,6,5,6,0,6,6,6,5,5,2,5,6,5,3,5,6],
+    [6,2,5,5,5,0,5,5,5,5,5,5,5,5,5,5,0,5,5,5,5,5,6,2,6],
     [6,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,5,6,5,6],
     [6,5,6,6,6,5,2,5,5,5,5,5,6,5,5,5,5,2,5,5,6,5,6,5,6],
-    [6,5,5,5,5,5,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,5,5,6],
+    [6,5,5,5,5,5,5,6,5,2,5,5,6,5,2,5,5,6,5,2,6,5,5,5,6],
     [6,5,6,6,5,6,0,6,5,5,5,5,6,5,0,5,5,6,5,5,6,0,5,5,6],
-    [6,5,5,5,5,6,5,6,5,0,5,5,5,5,5,5,5,6,5,5,6,6,6,5,6],
+    [6,2,5,5,5,6,5,6,5,5,2,5,5,5,2,5,5,6,5,5,6,6,6,5,6],
     [6,5,6,6,6,6,5,6,6,6,6,5,1,5,6,6,6,6,5,5,0,5,5,5,6],
-    [6,5,5,0,5,5,5,6,5,5,5,5,5,5,5,5,5,6,5,5,6,5,5,5,6],
+    [6,5,5,0,5,5,2,6,5,5,2,5,5,5,5,5,5,6,5,5,6,5,5,2,6],
     [6,5,6,6,6,6,5,6,5,0,5,5,6,5,2,5,5,6,5,5,6,5,6,5,6],
     [6,5,5,5,5,6,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,6,5,6],
-    [6,5,6,6,5,6,2,5,5,5,2,5,6,5,5,5,0,5,5,5,6,5,6,5,6],
-    [6,5,6,6,5,6,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,5,5,5,6],
-    [6,4,5,0,5,5,5,5,5,5,5,5,5,5,5,5,0,5,5,5,5,5,5,5,6],
+    [6,2,6,6,5,6,2,5,5,5,2,5,6,5,5,5,2,5,2,5,6,5,6,5,6],
+    [6,5,6,6,5,6,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,2,5,5,6],
+    [6,4,5,0,5,5,5,5,5,5,2,5,5,5,5,5,2,5,5,5,5,5,5,5,6],
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
 
 ]    
@@ -125,18 +125,18 @@ def getMonster(grid):
 
 def moveInGrid(grid,monsterY,monsterX):
     moveMonster = []
-    if grid[monsterY][monsterX-1] == DIAMOND_CELL and grid[monsterY][monsterX-1] != WALL_CELL:
+    if (grid[monsterY][monsterX-1] == DIAMOND_CELL or grid[monsterY][monsterX-1] == EMPTY_CELL or grid[monsterY][monsterX-1] == PLAYER_CELL) and grid[monsterY][monsterX-1] != WALL_CELL:
         moveMonster.append('left')
-    if grid[monsterY][monsterX+1] == DIAMOND_CELL and grid[monsterY][monsterX+1] != WALL_CELL :
+    if (grid[monsterY][monsterX+1] == DIAMOND_CELL  or grid[monsterY][monsterX+1] == EMPTY_CELL or grid[monsterY][monsterX+1] == PLAYER_CELL) and grid[monsterY][monsterX+1] != WALL_CELL :
         moveMonster.append('right')
-    if grid[monsterY-1][monsterX] == DIAMOND_CELL and grid[monsterY-1][monsterX] != WALL_CELL:
+    if (grid[monsterY-1][monsterX] == DIAMOND_CELL or grid[monsterY-1][monsterX] == EMPTY_CELL or grid[monsterY-1][monsterX] == PLAYER_CELL) and grid[monsterY-1][monsterX] != WALL_CELL:
         moveMonster.append('up')
-    if grid[monsterY+1][monsterX] == DIAMOND_CELL and grid[monsterY+1][monsterX] != WALL_CELL :
+    if (grid[monsterY+1][monsterX] == DIAMOND_CELL or grid[monsterY+1][monsterX] == EMPTY_CELL or grid[monsterY+1][monsterX] == PLAYER_CELL) and grid[monsterY+1][monsterX] != WALL_CELL :
         moveMonster.append('down')
     return moveMonster
 
 def canMove():
-    global grid
+    global grid,lives
     indexEmeny = getMonster(grid)
     for move in indexEmeny:
         monsterY = move[0]
@@ -145,25 +145,50 @@ def canMove():
         if len(postionToGo) > 0:
             moveMonster = random.choice(postionToGo)
             if moveMonster == 'left':
-                if grid[monsterY][monsterX-1] == DIAMOND_CELL and grid[monsterY][monsterX-1] != EMPTY_CELL:
+                if grid[monsterY][monsterX-1] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
                     grid[monsterY][monsterX-1] = MONSTER_CELL
+                elif grid[monsterY][monsterX-1] == EMPTY_CELL:
+                    grid[monsterY][monsterX] = EMPTY_CELL
+                    grid[monsterY][monsterX-1] = MONSTER_CELL
+                elif grid[monsterY][monsterX-1] == PLAYER_CELL:
+                    lives -= 1
+                    # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
             if moveMonster == 'right':
-                if grid[monsterY][monsterX+1] == DIAMOND_CELL and grid[monsterY][monsterX+1] != EMPTY_CELL:
+                if grid[monsterY][monsterX+1] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
                     grid[monsterY][monsterX+1] = MONSTER_CELL
+                elif grid[monsterY][monsterX+1] == EMPTY_CELL:
+                    grid[monsterY][monsterX] = EMPTY_CELL
+                    grid[monsterY][monsterX+1] = MONSTER_CELL
+                elif grid[monsterY][monsterX+1] == PLAYER_CELL:
+                    lives -= 1
+                    # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
+                    
             if moveMonster == 'up':
-                if grid[monsterY-1][monsterX] == DIAMOND_CELL and grid[monsterY-1-1][monsterX] != EMPTY_CELL:
+                if grid[monsterY-1][monsterX] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
                     grid[monsterY-1][monsterX] = MONSTER_CELL
+                elif grid[monsterY-1][monsterX] == EMPTY_CELL:
+                    grid[monsterY][monsterX] = EMPTY_CELL
+                    grid[monsterY-1][monsterX] = MONSTER_CELL
+                elif grid[monsterY-1][monsterX] == PLAYER_CELL:
+                    lives -= 1
+                    # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
             if moveMonster == 'down':
-                if grid[monsterY+1][monsterX] == DIAMOND_CELL and grid[monsterY+1][monsterX] != EMPTY_CELL:
+                if grid[monsterY+1][monsterX] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
                     grid[monsterY+1][monsterX] = MONSTER_CELL
+                elif grid[monsterY+1][monsterX] == EMPTY_CELL:
+                    grid[monsterY][monsterX] = EMPTY_CELL
+                    grid[monsterY+1][monsterX] = MONSTER_CELL
+                elif grid[monsterY+1][monsterX] == PLAYER_CELL:
+                    lives -=1
+                    # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
     canvas.delete("all")                
     drawGrid()
-    canvas.after(500,canMove)
-canvas.after(500,canMove)
+    canvas.after(100,canMove)
+canvas.after(100,canMove)
 drawGrid()
 
 def getPlayerY():
@@ -180,6 +205,14 @@ def getPlayerX():
                 index = col
     return index
 
+# end game
+
+def endGame():
+    global grid 
+    grid = []
+    drawGrid()
+
+
 # move
 def move(moveX, moveY) :
     global lives,score,hasNoKey,hasKey,end
@@ -194,8 +227,9 @@ def move(moveX, moveY) :
 
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL: # count lives
             lives -= 1
-            winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
+            # winsound .PlaySound('sound/died.wav', winsound.SND_FILENAME)
             if lives == 0:
+                end = True
                 messagebox.showinfo("Lost","You Lost this game!")
         if moveX == 1 and moveY == 0: # move right
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
@@ -203,6 +237,7 @@ def move(moveX, moveY) :
             if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 messagebox.showinfo("Congrats","You Win!")
+                end = True
             if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
