@@ -36,6 +36,7 @@ WALL_CELL = 6
 # VARIABLES
 lives = 3
 score = 0
+tomove=[]
 # ---------------------------------------
 
 # -------------------------------------------
@@ -50,17 +51,17 @@ grid = [
     [6,6,0,6,6,5,6,6,6,6,5,6,0,6,6,6,5,5,5,5,6,5,3,5,6],
     [6,5,5,5,5,0,5,5,5,5,5,5,5,5,5,5,0,5,5,5,5,5,6,5,6],
     [6,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,5,6,5,6],
-    [6,5,6,6,6,5,5,5,5,5,5,5,6,5,5,5,5,5,5,5,6,5,6,5,6],
+    [6,5,6,6,6,5,2,5,5,5,5,5,6,5,5,5,5,2,5,5,6,5,6,5,6],
     [6,5,5,5,5,5,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,5,5,6],
-    [6,5,6,6,5,6,0,6,5,5,5,5,6,5,5,5,5,6,5,5,6,0,5,5,6],
+    [6,5,6,6,5,6,0,6,5,5,5,5,6,5,0,5,5,6,5,5,6,0,5,5,6],
     [6,5,5,5,5,6,5,6,5,0,5,5,5,5,5,5,5,6,5,5,6,6,6,5,6],
     [6,5,6,6,6,6,5,6,6,6,6,5,1,5,6,6,6,6,5,5,0,5,5,5,6],
     [6,5,5,0,5,5,5,6,5,5,5,5,5,5,5,5,5,6,5,5,6,5,5,5,6],
-    [6,5,6,6,6,6,5,6,5,0,5,5,6,5,5,5,5,6,5,5,6,5,6,5,6],
+    [6,5,6,6,6,6,5,6,5,0,5,5,6,5,2,5,5,6,5,5,6,5,6,5,6],
     [6,5,5,5,5,6,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,6,5,6],
-    [6,5,6,6,5,6,5,5,5,5,5,5,6,5,5,5,0,5,5,5,6,5,6,5,6],
+    [6,5,6,6,5,6,2,5,5,5,2,5,6,5,5,5,0,5,5,5,6,5,6,5,6],
     [6,5,6,6,5,6,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,5,5,5,6],
-    [6,4,5,0,5,5,5,5,5,5,5,5,5,5,5,5,2,5,5,5,5,5,5,5,6],
+    [6,4,5,0,5,5,5,5,5,5,5,5,5,5,5,5,0,5,5,5,5,5,5,5,6],
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
 
 ]    
@@ -92,19 +93,19 @@ def drawGrid():
     y=100
     for row in range(len(grid)):
         for col in range(len(grid[row])):
-            if grid[row][col] == 0:
+            if grid[row][col] == EMPTY_CELL:
                 canvas.create_rectangle(x,y,x+30,y+30,fill='',outline='')
-            elif grid[row][col] == 1:
+            elif grid[row][col] == PLAYER_CELL:
                 canvas.create_image(x+15,y+15,image = avatar,anchor='center')   
-            elif grid[row][col] == 2:
+            elif grid[row][col] == MONSTER_CELL:
                 canvas.create_image(x+15,y+15,image = monster,anchor='center')      
-            elif grid[row][col] == 3:
+            elif grid[row][col] == HOME_CELL:
                 canvas.create_image(x+15,y+15,image = home,anchor='center')
-            elif grid[row][col] == 4:
+            elif grid[row][col] == KEY_CELL:
                 canvas.create_image(x+15,y+15,image = key,anchor='center')  
-            elif grid[row][col] == 5:
+            elif grid[row][col] == DIAMOND_CELL:
                 canvas.create_image(x+15,y+15,image = diamond,anchor='center') 
-            elif grid[row][col]== 6:
+            elif grid[row][col]== WALL_CELL:
                 canvas.create_image(x+15,y+15,image= wall,anchor='center')           
             x+=30
         x=10
@@ -115,50 +116,51 @@ drawGrid()
 # ----------------------------------move monster
 
 def getMonster(grid):
-    monster = []
-    for row in range(len(grid)):
-        for col in range(len(grid[0])):
+    indexEnemy = []
+    for row in range (len(grid)):
+        for col in range(len(grid[row])):
             if grid[row][col] == MONSTER_CELL:
-                monster.append(row)
-    return monster
+                indexEnemy.append([row, col])
+    return indexEnemy
 
 def moveInGrid(grid,monsterY,monsterX):
     moveMonster = []
-    if grid[monsterY][monsterX-1] == DIAMOND_CELL and grid[monsterY][monsterX-1] != MONSTER_CELL:
+    if grid[monsterY][monsterX-1] == DIAMOND_CELL and grid[monsterY][monsterX-1] != WALL_CELL:
         moveMonster.append('left')
-    if grid[monsterY][monsterX+1] == DIAMOND_CELL and grid[monsterY][monsterX+1] != MONSTER_CELL :
+    if grid[monsterY][monsterX+1] == DIAMOND_CELL and grid[monsterY][monsterX+1] != WALL_CELL :
         moveMonster.append('right')
-    if grid[monsterY-1][monsterX] == DIAMOND_CELL and grid[monsterY-1][monsterX] != MONSTER_CELL:
+    if grid[monsterY-1][monsterX] == DIAMOND_CELL and grid[monsterY-1][monsterX] != WALL_CELL:
         moveMonster.append('up')
-    if grid[monsterY+1][monsterX] == DIAMOND_CELL and grid[monsterY+1][monsterX] != MONSTER_CELL :
+    if grid[monsterY+1][monsterX] == DIAMOND_CELL and grid[monsterY+1][monsterX] != WALL_CELL :
         moveMonster.append('down')
     return moveMonster
 
 def canMove():
+    global grid
     indexEmeny = getMonster(grid)
-    for moveMonster in indexEmeny:
-        monsterY = monster[0]
-        monsterX = monster[1]
-        postionToGo = moveInGrid(grid,monsterX,monsterY)
+    for move in indexEmeny:
+        monsterY = move[0]
+        monsterX = move[1]
+        postionToGo = moveInGrid(grid,monsterY,monsterX)
         if len(postionToGo) > 0:
             moveMonster = random.choice(postionToGo)
             if moveMonster == 'left':
-                if grid[monsterY][monsterX-1] == DIAMOND_CELL and grid[monsterY][monsterX-1] != PLAYER_CELL:
+                if grid[monsterY][monsterX-1] == DIAMOND_CELL and grid[monsterY][monsterX-1] != EMPTY_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
                     grid[monsterY][monsterX-1] = MONSTER_CELL
             if moveMonster == 'right':
-                if grid[monsterY][monsterX+1] == DIAMOND_CELL and grid[monsterY][monsterX+1] != PLAYER_CELL:
+                if grid[monsterY][monsterX+1] == DIAMOND_CELL and grid[monsterY][monsterX+1] != EMPTY_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
                     grid[monsterY][monsterX+1] = MONSTER_CELL
             if moveMonster == 'up':
-                if grid[monsterY-1][monsterX] == DIAMOND_CELL and grid[monsterY-1-1][monsterX] != PLAYER_CELL:
+                if grid[monsterY-1][monsterX] == DIAMOND_CELL and grid[monsterY-1-1][monsterX] != EMPTY_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
                     grid[monsterY-1][monsterX] = MONSTER_CELL
             if moveMonster == 'down':
-                if grid[monsterY+1][monsterX] == DIAMOND_CELL and grid[monsterY+1][monsterX] != PLAYER_CELL:
+                if grid[monsterY+1][monsterX] == DIAMOND_CELL and grid[monsterY+1][monsterX] != EMPTY_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
                     grid[monsterY+1][monsterX] = MONSTER_CELL
-    # canvas.delete("all")                
+    canvas.delete("all")                
     drawGrid()
     canvas.after(500,canMove)
 canvas.after(500,canMove)
