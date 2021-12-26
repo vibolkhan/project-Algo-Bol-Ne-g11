@@ -1,4 +1,5 @@
-import tkinter as tk # import tkiker 
+import tkinter as tk
+from tkinter import font # import tkiker 
 import winsound # import sound
 import random # import random
 # ---------------------------------------------------------------------------------------------------
@@ -10,7 +11,12 @@ frame.master.title('Amazing game')
 canvas = tk.Canvas(frame)
 root.resizable(0,0)
 # ---------------------------------------------------------------------------------------------------
-
+# menubar
+menubar = tk.Menu(frame)  
+menubar.add_command(label="Welcome!") 
+menubar.add_command(label="Quit!", command=quit) 
+# display menubar
+root.config(menu=menubar)
 # ---------------------------------------------------------------------------------------------------
 # images
 myBackground=tk.PhotoImage(file='image/backg.png')
@@ -20,7 +26,7 @@ home = tk.PhotoImage(file='image/home.png')
 key = tk.PhotoImage(file='image/key.png')
 wall=tk.PhotoImage(file="image/wall.png")
 heart_image=tk.PhotoImage(file="image/heart.png")
-diamond =tk.PhotoImage(file="image/diamond.png")
+coin =tk.PhotoImage(file="image/coin.png")
 congrats = tk.PhotoImage(file='image/congrats.png')
 lostGame = tk.PhotoImage(file='image/gameover.png')
 # ---------------------------------------------------------------------------------------------------
@@ -117,13 +123,12 @@ def drawGrid():
             elif grid[row][col] == KEY_CELL:
                 canvas.create_image(x+15,y+15,image = key,anchor='center')  
             elif grid[row][col] == DIAMOND_CELL:
-                canvas.create_image(x+15,y+15,image = diamond,anchor='center') 
+                canvas.create_image(x+15,y+15,image = coin,anchor='center') 
             elif grid[row][col]== WALL_CELL:
                 canvas.create_image(x+15,y+15,image= wall,anchor='center')           
             x+=30
         x=10
         y+=30
-    print(lives)
 # ---------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------
@@ -202,22 +207,24 @@ canvas.after(500,canMove)
 
 # ---------------------------------------------------------------------------------------------------
 # restart game
-def restartGame():
-    if lives >= 0:
-        grid[12][9]=PLAYER_CELL
-        drawGrid()
+# def restartGame():
+#     if lives >= 0:
+#         grid[12][9]=PLAYER_CELL
+#         drawGrid()
 # ---------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------
 # end game
 def getStatus():
-    global grid
+    global grid,score
     grid=[]
     canvas.create_image(380,320, image=myBackground)
     if end and not isWin:
         canvas.create_image(380,320, image=lostGame)  
+        canvas.create_text(380,400,text='You have ' + str(score) + ' scores' ,font=('Arial',30))
     elif end and isWin:
         canvas.create_image(380,320, image=congrats)
+        canvas.create_text(380,400,text='You have ' + str(score) + ' scores',font=('Arial',30))
 # ------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------
@@ -246,7 +253,7 @@ def move(moveX, moveY) :
     if grid[newPlayerY][newPlayerX] != WALL_CELL :
         if grid[newPlayerY][newPlayerX] == DIAMOND_CELL: # count score
                 score += 10 
-                # winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
+                winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL and lives > 0 and not end: # count lives
             lives -= 1
             if lives == 0:
