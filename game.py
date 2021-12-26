@@ -76,13 +76,19 @@ grid = [
 # ---------------------------------------------------------------------------------------------------
 # drawing
 def drawGrid():
-    global end
+    global end,lives
     canvas.delete('all')
     canvas.create_image(380,320, image=myBackground)
     canvas.create_text(330,30,text='Lives: ',font=('Arial',18))
-    heart1 = canvas.create_image(380,30,image=heart_image)
-    heart2 = canvas.create_image(420,30,image=heart_image)
-    heart3 = canvas.create_image(460,30,image=heart_image)
+    if lives == 3:
+        heart1 = canvas.create_image(380,30,image=heart_image)
+        heart2 = canvas.create_image(420,30,image=heart_image)
+        heart3 = canvas.create_image(460,30,image=heart_image)
+    elif lives == 2:
+        heart1 = canvas.create_image(380,30,image=heart_image)
+        heart2 = canvas.create_image(420,30,image=heart_image)
+    elif lives == 1:
+        heart1 = canvas.create_image(380,30,image=heart_image)
     canvas.create_text(620,30,text='Levels: 1',font=('Arial',18))
     canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18))
     if hasNoKey:
@@ -143,7 +149,9 @@ def moveInGrid(grid,monsterY,monsterX):
     return moveMonster
 
 def canMove():
-    global grid,lives
+    global grid,lives,end
+    if lives <= 0:
+        end = True
     indexEmeny = getMonster(grid)
     for move in indexEmeny:
         monsterY = move[0]
