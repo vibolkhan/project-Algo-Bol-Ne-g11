@@ -1,16 +1,18 @@
-from math import trunc
-import tkinter as tk
-from tkinter import PhotoImage, messagebox
-import winsound
-import random
+import tkinter as tk # import tkiker 
+import winsound # import sound
+import random # import random
+# ---------------------------------------------------------------------------------------------------
+# display window
 root = tk.Tk() 
 root.geometry("770x650")
 frame = tk.Frame()
 frame.master.title('Amazing game')
 canvas = tk.Canvas(frame)
 root.resizable(0,0)
- 
+# ---------------------------------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------------------------------
+# images
 myBackground=tk.PhotoImage(file='image/backg.png')
 avatar = tk.PhotoImage(file='image/avatar.png')
 monster = tk.PhotoImage(file='image/monster.png')
@@ -21,6 +23,8 @@ heart_image=tk.PhotoImage(file="image/heart.png")
 diamond =tk.PhotoImage(file="image/diamond.png")
 congrats = tk.PhotoImage(file='image/congrats.png')
 lostGame = tk.PhotoImage(file='image/gameover.png')
+# ---------------------------------------------------------------------------------------------------
+
 # ---------------------------------------
 # CONSTANTS
 EMPTY_CELL = 0
@@ -37,7 +41,6 @@ WALL_CELL = 6
 lives = 3
 score = 0
 tomove=[]
-
 # ---------------------------------------
 
 # -------------------------------------------
@@ -46,7 +49,7 @@ hasKey = False
 hasNoKey = False
 end = False
 isWin = False
-restartGame = False
+restart = False
 # -------------------------------------------
 grid = [
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
@@ -70,7 +73,8 @@ grid = [
 ]    
 
 #12,9
-
+# ---------------------------------------------------------------------------------------------------
+# drawing
 def drawGrid():
     global end
     canvas.delete('all')
@@ -79,15 +83,9 @@ def drawGrid():
     heart1 = canvas.create_image(380,30,image=heart_image)
     heart2 = canvas.create_image(420,30,image=heart_image)
     heart3 = canvas.create_image(460,30,image=heart_image)
-    canvas.create_text(620,30,text='Levels: 1 ',font=('Arial',18))
-
+    canvas.create_text(620,30,text='Levels: 1',font=('Arial',18))
     canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18))
-    if lives == 2:
-        deleteHeart(heart3)
-    elif lives == 1:
-        deleteHeart(heart2)
-    elif lives <= 0:
-        end = True
+
     if hasNoKey:
         textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18))
     if hasKey and not hasNoKey:
@@ -99,6 +97,7 @@ def drawGrid():
 
     if end:
         getStatus()
+
     x=10
     y=100
     for row in range(len(grid)):
@@ -121,13 +120,10 @@ def drawGrid():
         x=10
         y+=30
     print(lives)
+# ---------------------------------------------------------------------------------------------------
 
-# deledt heart
-def deleteHeart(heart):
-    canvas.delete('heart')
-
-# ----------------------------------move monster
-
+# ---------------------------------------------------------------------------------------------------
+# move monster
 def getMonster(grid):
     indexEnemy = []
     for row in range (len(grid)):
@@ -149,7 +145,7 @@ def moveInGrid(grid,monsterY,monsterX):
     return moveMonster
 
 def canMove():
-    global grid,lives
+    global grid,lives,restart
     indexEmeny = getMonster(grid)
     for move in indexEmeny:
         monsterY = move[0]
@@ -166,6 +162,7 @@ def canMove():
                     grid[monsterY][monsterX-1] = MONSTER_CELL
                 elif grid[monsterY][monsterX-1] == PLAYER_CELL and lives >= 0:
                     lives -= 1
+                    restart = True
             if moveMonster == 'right':
                 if grid[monsterY][monsterX+1] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -175,6 +172,7 @@ def canMove():
                     grid[monsterY][monsterX+1] = MONSTER_CELL
                 elif grid[monsterY][monsterX+1] == PLAYER_CELL and lives >= 0:
                     lives -= 1 
+                    restart = True
             if moveMonster == 'up':
                 if grid[monsterY-1][monsterX] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -184,6 +182,7 @@ def canMove():
                     grid[monsterY-1][monsterX] = MONSTER_CELL
                 elif grid[monsterY-1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -= 1
+                    restart = True
             if moveMonster == 'down':
                 if grid[monsterY+1][monsterX] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -193,17 +192,34 @@ def canMove():
                     grid[monsterY+1][monsterX] = MONSTER_CELL
                 elif grid[monsterY+1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -=1
+                    restart = True
     drawGrid()
     canvas.after(300,canMove)
 canvas.after(300,canMove)
+# ---------------------------------------------------------------------------------------------------
 
-# restart game
-def restartGame():
-    if lives >= 0:
-        grid[12][9]=PLAYER_CELL
-        drawGrid()
+# ---------------------------------------------------------------------------------------------------
+# # restart game
+# def restartGame():
+#     if lives >= 0:
+#         grid[12][9]=PLAYER_CELL
+#         restart = False
+# ---------------------------------------------------------------------------------------------------
 
+# ------------------------------------------------------------------
+# end game
+def getStatus():
+    global grid
+    grid=[]
+    canvas.create_image(380,320, image=myBackground)
+    if end and not isWin:
+        canvas.create_image(380,320, image=lostGame)  
+    elif end and isWin:
+        canvas.create_image(380,320, image=congrats)
+# ------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------------------------------
+# move player
 
 def getPlayerY():
     for row in range(len(grid)):
@@ -219,17 +235,6 @@ def getPlayerX():
                 index = col
     return index
 
-# end game
-def getStatus():
-    global grid
-    grid=[]
-    canvas.create_image(380,320, image=myBackground)
-    if end and not isWin:
-        canvas.create_image(380,320, image=lostGame)  
-    elif end and isWin:
-        canvas.create_image(380,320, image=congrats)
-
-# move player
 def move(moveX, moveY) :
     global lives,score,hasNoKey,hasKey,end,isWin
     playerX = getPlayerX()
@@ -304,8 +309,10 @@ def move(moveX, moveY) :
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
     drawGrid()
-# --------------------------------------
-# MOVE POSITION
+# ---------------------------------------------------------------------------------------------------
+
+# --------------------------------------------------------
+# MOVE PLAYER
 def move_right(event):
     move(1,0)
 def move_left(event):
@@ -314,15 +321,19 @@ def move_down(event):
     move(0,1)
 def move_up(event):
     move(0,-1)
-# --------------------------------------
+# --------------------------------------------------------
 
+# ---------------------------------------------------------------------------------------
 # click on key board
 root.bind('<Left>',move_left) #### keyboard
 root.bind('<Right>',move_right) #### keyboard
 root.bind('<Down>',move_down) #### keyboard
 root.bind('<Up>',move_up) #### keyboard
+# ---------------------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------------------
 # display all
 canvas.pack(expand=True, fill='both')
 frame.pack(expand=True, fill='both')
 root.mainloop()
+# ---------------------------------------------------------------------------------------
