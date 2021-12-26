@@ -249,8 +249,6 @@ def move(moveX, moveY) :
                 # winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL and lives > 0 and not end: # count lives
             lives -= 1
-            grid[newPlayerY][newPlayerX] == PLAYER_CELL
-            grid[playerY][playerX] == MONSTER_CELL
             if lives == 0:
                 end = True
                 winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
@@ -265,6 +263,9 @@ def move(moveX, moveY) :
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
                 hasNoKey = True
+            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+                grid[playerY][playerX] = PLAYER_CELL
+                grid[newPlayerY][newPlayerX] = MONSTER_CELL
             elif newPlayerX < len(grid[0]):
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
@@ -280,6 +281,9 @@ def move(moveX, moveY) :
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
                 hasNoKey = True
+            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+                grid[playerY][playerX] = PLAYER_CELL
+                grid[newPlayerY][newPlayerX] = MONSTER_CELL
             elif newPlayerX >= 0:
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
@@ -295,6 +299,9 @@ def move(moveX, moveY) :
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
                 hasNoKey = True
+            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+                grid[playerY][playerX] = PLAYER_CELL
+                grid[newPlayerY][newPlayerX] = MONSTER_CELL
             elif newPlayerY < len(grid):
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
@@ -309,6 +316,9 @@ def move(moveX, moveY) :
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
                 hasNoKey = True
+            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+                grid[playerY][playerX] = PLAYER_CELL
+                grid[newPlayerY][newPlayerX] = MONSTER_CELL
             elif newPlayerY >= 0:
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
