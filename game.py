@@ -86,6 +86,7 @@ def drawGrid():
     canvas.delete('all')
     canvas.create_image(380,320, image=myBackground)
     canvas.create_text(330,30,text='Lives: ',font=('Arial',18))
+    # -------------------------------------------- draw heart -------------------------------------------
     if lives == 3:
         heart1 = canvas.create_image(380,30,image=heart_image)
         heart2 = canvas.create_image(420,30,image=heart_image)
@@ -95,8 +96,10 @@ def drawGrid():
         heart2 = canvas.create_image(420,30,image=heart_image)
     elif lives == 1:
         heart1 = canvas.create_image(380,30,image=heart_image)
-    canvas.create_text(620,30,text='Levels: 1',font=('Arial',18))
-    canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18))
+    # -------------------------------------------- draw heart -------------------------------------------
+    canvas.create_text(620,30,text='Levels: 1',font=('Arial',18)) # show level
+    canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18)) # show score
+    # -------------------------------------------- display message ---------------------------------------
     if hasNoKey:
         textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18))
     if hasKey and not hasNoKey:
@@ -105,7 +108,7 @@ def drawGrid():
         canvas.itemconfig(textKey,text='You has key, you can go home now!')
     if hasKey:
         textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18))
-
+    # -------------------------------------------- display message ---------------------------------------
     if end:
         getStatus()
     x=10
@@ -262,15 +265,15 @@ def move(moveX, moveY) :
         if moveX == 1 and moveY == 0: # move right
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 end = True
                 isWin = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
                 hasNoKey = True
-            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+            elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
             elif newPlayerX < len(grid[0]):
@@ -280,15 +283,15 @@ def move(moveX, moveY) :
         elif moveX == -1 and moveY == 0: # move left
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 end = True
                 isWin = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
                 hasNoKey = True
-            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+            elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
             elif newPlayerX >= 0:
@@ -298,15 +301,15 @@ def move(moveX, moveY) :
         elif moveX == 0 and moveY == 1: # move down
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 end = True
                 isWin = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
                 hasNoKey = True
-            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+            elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
             elif newPlayerY < len(grid):
@@ -315,15 +318,15 @@ def move(moveX, moveY) :
         elif moveX == 0 and moveY == -1: #move up
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 end = True
                 isWin = True    
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = HOME_CELL
                 hasNoKey = True
-            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+            elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
             elif newPlayerY >= 0:
