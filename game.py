@@ -49,23 +49,23 @@ hasKey = False
 hasNoKey = False
 end = False
 isWin = False
-restart = False
+restartGame = False
 # -------------------------------------------
 grid = [
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
     [6,5,5,5,5,5,5,5,5,6,5,5,5,6,5,5,2,5,5,5,6,5,5,5,6],
     [6,6,5,6,6,5,6,6,6,6,5,6,5,6,6,6,5,5,5,5,6,5,3,5,6],
-    [6,2,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,2,6],
+    [6,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,5,6],
     [6,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,5,6,5,6],
-    [6,5,6,6,6,5,2,5,5,5,5,5,6,5,5,5,5,5,5,5,6,5,6,5,6],
-    [6,5,5,5,5,5,5,6,5,5,5,5,6,5,2,5,5,6,5,5,6,5,5,5,6],
+    [6,5,6,6,6,5,5,5,5,5,5,5,6,5,5,5,5,5,5,5,6,5,6,5,6],
+    [6,5,5,5,5,5,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,5,5,6],
     [6,5,6,6,5,6,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,5,5,6],
-    [6,2,5,5,5,6,5,6,5,5,2,5,5,5,5,5,5,6,5,5,6,6,6,5,6],
+    [6,5,5,5,5,6,5,6,5,5,5,5,5,5,5,5,5,6,5,5,6,6,6,5,6],
     [6,5,6,6,6,6,5,6,6,6,6,5,1,5,6,6,6,6,5,5,5,5,5,5,6],
     [6,5,5,5,5,5,5,6,5,5,5,5,5,5,5,5,5,6,5,5,6,5,5,5,6],
     [6,5,6,6,6,6,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,6,5,6],
     [6,5,5,5,5,6,5,6,5,5,5,5,6,5,5,5,5,6,5,5,6,5,6,5,6],
-    [6,2,6,6,5,6,2,5,5,5,5,5,6,5,5,5,5,5,5,5,6,5,6,5,6],
+    [6,5,6,6,5,6,2,5,5,5,5,5,6,5,5,5,5,5,5,5,6,5,6,5,6],
     [6,5,6,6,5,6,5,5,5,6,6,6,6,6,6,6,5,6,6,6,6,5,5,5,6],
     [6,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,2,5,5,5,5,5,5,5,6],
     [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
@@ -85,7 +85,6 @@ def drawGrid():
     heart3 = canvas.create_image(460,30,image=heart_image)
     canvas.create_text(620,30,text='Levels: 1',font=('Arial',18))
     canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18))
-
     if hasNoKey:
         textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18))
     if hasKey and not hasNoKey:
@@ -97,7 +96,6 @@ def drawGrid():
 
     if end:
         getStatus()
-
     x=10
     y=100
     for row in range(len(grid)):
@@ -145,7 +143,7 @@ def moveInGrid(grid,monsterY,monsterX):
     return moveMonster
 
 def canMove():
-    global grid,lives,restart
+    global grid,lives
     indexEmeny = getMonster(grid)
     for move in indexEmeny:
         monsterY = move[0]
@@ -162,7 +160,6 @@ def canMove():
                     grid[monsterY][monsterX-1] = MONSTER_CELL
                 elif grid[monsterY][monsterX-1] == PLAYER_CELL and lives >= 0:
                     lives -= 1
-                    restart = True
             if moveMonster == 'right':
                 if grid[monsterY][monsterX+1] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -172,7 +169,6 @@ def canMove():
                     grid[monsterY][monsterX+1] = MONSTER_CELL
                 elif grid[monsterY][monsterX+1] == PLAYER_CELL and lives >= 0:
                     lives -= 1 
-                    restart = True
             if moveMonster == 'up':
                 if grid[monsterY-1][monsterX] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -182,7 +178,6 @@ def canMove():
                     grid[monsterY-1][monsterX] = MONSTER_CELL
                 elif grid[monsterY-1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -= 1
-                    restart = True
             if moveMonster == 'down':
                 if grid[monsterY+1][monsterX] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -192,18 +187,17 @@ def canMove():
                     grid[monsterY+1][monsterX] = MONSTER_CELL
                 elif grid[monsterY+1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -=1
-                    restart = True
     drawGrid()
-    canvas.after(300,canMove)
-canvas.after(300,canMove)
+    canvas.after(500,canMove)
+canvas.after(500,canMove)
 # ---------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------
-# # restart game
-# def restartGame():
-#     if lives >= 0:
-#         grid[12][9]=PLAYER_CELL
-#         restart = False
+# restart game
+def restartGame():
+    if lives >= 0:
+        grid[12][9]=PLAYER_CELL
+        drawGrid()
 # ---------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------
@@ -244,7 +238,7 @@ def move(moveX, moveY) :
     if grid[newPlayerY][newPlayerX] != WALL_CELL :
         if grid[newPlayerY][newPlayerX] == DIAMOND_CELL: # count score
                 score += 10 
-                winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
+                # winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL and lives >= 0: # count lives
             lives -= 1
             if lives == 0:
