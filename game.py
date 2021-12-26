@@ -239,8 +239,10 @@ def move(moveX, moveY) :
         if grid[newPlayerY][newPlayerX] == DIAMOND_CELL: # count score
                 score += 10 
                 # winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
-        if grid[newPlayerY][newPlayerX] == MONSTER_CELL and lives >= 0: # count lives
+        if grid[newPlayerY][newPlayerX] == MONSTER_CELL and lives > 0 and not end: # count lives
             lives -= 1
+            grid[newPlayerY][newPlayerX] == PLAYER_CELL
+            grid[playerY][playerX] == MONSTER_CELL
             if lives == 0:
                 end = True
                 winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
