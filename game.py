@@ -265,7 +265,7 @@ def move(moveX, moveY) :
         if moveX == 1 and moveY == 0: # move right
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 end = True
                 isWin = True
@@ -283,7 +283,7 @@ def move(moveX, moveY) :
         elif moveX == -1 and moveY == 0: # move left
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 end = True
                 isWin = True
@@ -301,7 +301,7 @@ def move(moveX, moveY) :
         elif moveX == 0 and moveY == 1: # move down
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 end = True
                 isWin = True
@@ -318,7 +318,7 @@ def move(moveX, moveY) :
         elif moveX == 0 and moveY == -1: #move up
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 end = True
                 isWin = True    
