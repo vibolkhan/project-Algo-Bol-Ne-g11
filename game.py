@@ -109,8 +109,11 @@ def drawGrid():
     if hasKey:
         textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18))
     # -------------------------------------------- display message ---------------------------------------
+
+    # ------------------------------------------ end game ------------------------------------------------
     if end:
         getStatus()
+    # ------------------------------------------ end game ------------------------------------------------
     x=10
     y=100
     for row in range(len(grid)):
@@ -176,6 +179,7 @@ def canMove():
                     grid[monsterY][monsterX-1] = MONSTER_CELL
                 elif grid[monsterY][monsterX-1] == PLAYER_CELL and lives >= 0:
                     lives -= 1
+                    canvas.after(700,restartGame)
             if moveMonster == 'right':
                 if grid[monsterY][monsterX+1] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -185,6 +189,7 @@ def canMove():
                     grid[monsterY][monsterX+1] = MONSTER_CELL
                 elif grid[monsterY][monsterX+1] == PLAYER_CELL and lives >= 0:
                     lives -= 1 
+                    canvas.after(700,restartGame)
             if moveMonster == 'up':
                 if grid[monsterY-1][monsterX] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -194,6 +199,7 @@ def canMove():
                     grid[monsterY-1][monsterX] = MONSTER_CELL
                 elif grid[monsterY-1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -= 1
+                    canvas.after(700,restartGame)
             if moveMonster == 'down':
                 if grid[monsterY+1][monsterX] == DIAMOND_CELL:
                     grid[monsterY][monsterX] = DIAMOND_CELL
@@ -203,6 +209,7 @@ def canMove():
                     grid[monsterY+1][monsterX] = MONSTER_CELL
                 elif grid[monsterY+1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -=1
+                    canvas.after(700,restartGame)
     drawGrid()
     canvas.after(500,canMove)
 canvas.after(500,canMove)
@@ -210,10 +217,10 @@ canvas.after(500,canMove)
 
 # ---------------------------------------------------------------------------------------------------
 # restart game
-# def restartGame():
-#     if lives >= 0:
-#         grid[12][9]=PLAYER_CELL
-#         drawGrid()
+def restartGame():
+    if lives >= 0:
+        grid[12][9]=PLAYER_CELL
+        canMove()
 # ---------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------
@@ -259,6 +266,7 @@ def move(moveX, moveY) :
                 winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL and lives > 0 and not end: # count lives
             lives -= 1
+            canvas.after(700,restartGame)
             if lives == 0:
                 end = True
                 winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
@@ -276,6 +284,7 @@ def move(moveX, moveY) :
             elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
+                canvas.after(700,restartGame)
             elif newPlayerX < len(grid[0]):
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
@@ -294,6 +303,7 @@ def move(moveX, moveY) :
             elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
+                canvas.after(700,restartGame)
             elif newPlayerX >= 0:
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
@@ -312,6 +322,7 @@ def move(moveX, moveY) :
             elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
+                canvas.after(700,restartGame)
             elif newPlayerY < len(grid):
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
@@ -329,6 +340,7 @@ def move(moveX, moveY) :
             elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 grid[playerY][playerX] = PLAYER_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
+                canvas.after(700,restartGame)
             elif newPlayerY >= 0:
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
