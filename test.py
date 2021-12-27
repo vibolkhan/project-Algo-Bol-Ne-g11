@@ -31,7 +31,9 @@ coin =tk.PhotoImage(file="image/coin.png")
 congrats = tk.PhotoImage(file='image/congrats.png')
 lostGame = tk.PhotoImage(file='image/gameover.png')
 start = tk.PhotoImage(file = "image/start.png")
+lost = tk.PhotoImage(file="image/lost.png")
 laod = tk.PhotoImage(file = "image/laod.png")
+win = tk.PhotoImage(file='image/win.png')
 # ---------------------------------------------------------------------------------------------------
 
 # ---------------------------------------
@@ -73,10 +75,10 @@ grid = [
     [6 ,2 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,1 ,5 ,6 ,6 ,6 ,6 ,5 ,2 ,5 ,5 ,5 ,5 ,6 ],
     [6 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,5 ,2 ,6 ],
     [6 ,2 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
-    [6 ,5 ,2 ,5 ,5 ,6 ,5 ,6 ,5 ,2 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+    [6 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ,5 ,2 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
     [6 ,5 ,6 ,6 ,5 ,6 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,2 ,5 ,6 ,5 ,6 ,5 ,6 ],
     [6 ,4 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,5 ,2 ,6 ],
-    [6 ,2 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,2 ,5 ,5 ,5 ,2 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ],
+    [6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,2 ,5 ,5 ,5 ,2 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ],
     [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ],
 
 ]      
@@ -108,13 +110,13 @@ def drawGrid():
     canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18),fill='white') # show score
     # -------------------------------------------- display message ---------------------------------------
     if hasNoKey:
-        textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18))
+        textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18),fill= "white")
     if hasKey and not hasNoKey:
-        textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18))
+        textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18),fill = "white")
     if hasNoKey and hasKey:
         canvas.itemconfig(textKey,text='You has key, you can go home now!')
     if hasKey:
-        textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18))
+        textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18),fill="white")
     # -------------------------------------------- display message ---------------------------------------
 
     # ------------------------------------------ end game ------------------------------------------------
@@ -359,11 +361,13 @@ def getStatus():
     grid=[]
     canvas.create_image(380,320, image=myBackground)
     if end and not isWin:
-        canvas.create_image(380,320, image=lostGame)  
-        canvas.create_text(380,400,text='You have ' + str(score) + ' scores' ,font=('Arial',30))
+        canvas.create_image(380,230, image = lost)
+        canvas.create_image(380,440, image=lostGame)  
+        canvas.create_text(380,510,text='Your scores is : ' + str(score)+' points' ,font=('Arial',30))
     elif end and isWin:
-        canvas.create_image(380,320, image=congrats)
-        canvas.create_text(380,400,text='You have ' + str(score) + ' scores',font=('Arial',30))
+        canvas.create_image(380,230, image = win)  
+        canvas.create_image(380,440, image=congrats)
+        canvas.create_text(380,520,text='Your scores is : ' + str(score) + ' points',font=('Arial',30))
 # ------------------------------------------------------------------
 
 # --------------------------------------------------------
