@@ -30,6 +30,7 @@ heart_image=tk.PhotoImage(file="image/heart.png")
 coin =tk.PhotoImage(file="image/coin.png")
 congrats = tk.PhotoImage(file='image/congrats.png')
 lostGame = tk.PhotoImage(file='image/gameover.png')
+lost = tk.PhotoImage(file="image/lost.png")
 # ---------------------------------------------------------------------------------------------------
 
 # ---------------------------------------
@@ -39,7 +40,7 @@ PLAYER_CELL = 1
 MONSTER_CELL = 2 
 HOME_CELL = 3
 KEY_CELL = 4
-DIAMOND_CELL = 5
+COIN_CELL = 5
 WALL_CELL = 6
 # ---------------------------------------
 
@@ -118,7 +119,7 @@ def drawGrid():
 
     # ------------------------------------------ restart game ------------------------------------------------
     if restart and not end:
-        canvas.after(800,restartGame)
+        restartGame()
     x=10
     y=100
     for row in range(len(grid)):
@@ -133,7 +134,7 @@ def drawGrid():
                 canvas.create_image(x+15,y+15,image = home,anchor='center')
             elif grid[row][col] == KEY_CELL:
                 canvas.create_image(x+15,y+15,image = key,anchor='center')  
-            elif grid[row][col] == DIAMOND_CELL:
+            elif grid[row][col] == COIN_CELL:
                 canvas.create_image(x+15,y+15,image = coin,anchor='center') 
             elif grid[row][col]== WALL_CELL:
                 canvas.create_image(x+15,y+15,image= wall,anchor='center')           
@@ -154,13 +155,13 @@ def getMonster(grid):
 
 def moveInGrid(grid,monsterY,monsterX):
     moveMonster = []
-    if (grid[monsterY][monsterX-1] == DIAMOND_CELL or grid[monsterY][monsterX-1] == PLAYER_CELL) and grid[monsterY][monsterX-1] != WALL_CELL:
+    if (grid[monsterY][monsterX-1] == COIN_CELL or grid[monsterY][monsterX-1] == EMPTY_CELL) and grid[monsterY][monsterX-1] != WALL_CELL:
         moveMonster.append('left')
-    if (grid[monsterY][monsterX+1] == DIAMOND_CELL or grid[monsterY][monsterX+1] == PLAYER_CELL) and grid[monsterY][monsterX+1] != WALL_CELL :
+    if (grid[monsterY][monsterX+1] == COIN_CELL or grid[monsterY][monsterX+1] == EMPTY_CELL) and grid[monsterY][monsterX+1] != WALL_CELL :
         moveMonster.append('right')
-    if (grid[monsterY-1][monsterX] == DIAMOND_CELL or grid[monsterY-1][monsterX] == PLAYER_CELL) and grid[monsterY-1][monsterX] != WALL_CELL:
+    if (grid[monsterY-1][monsterX] == COIN_CELL or grid[monsterY-1][monsterX] == EMPTY_CELL) and grid[monsterY-1][monsterX] != WALL_CELL:
         moveMonster.append('up')
-    if (grid[monsterY+1][monsterX] == DIAMOND_CELL or grid[monsterY+1][monsterX] == PLAYER_CELL) and grid[monsterY+1][monsterX] != WALL_CELL :
+    if (grid[monsterY+1][monsterX] == COIN_CELL or grid[monsterY+1][monsterX] == EMPTY_CELL) and grid[monsterY+1][monsterX] != WALL_CELL :
         moveMonster.append('down')
     return moveMonster
 
@@ -176,49 +177,67 @@ def monsterCanMove():
         if len(postionToGo) > 0:
             moveMonster = random.choice(postionToGo)
             if moveMonster == 'left':
-                if grid[monsterY][monsterX-1] == DIAMOND_CELL:
-                    grid[monsterY][monsterX] = DIAMOND_CELL
+                if grid[monsterY][monsterX-1] == EMPTY_CELL:
+                    grid[monsterY][monsterX] = EMPTY_CELL
+                    grid[monsterY][monsterX-1] = MONSTER_CELL
+                if grid[monsterY][monsterX-1] == COIN_CELL:
+                    grid[monsterY][monsterX] = COIN_CELL
                     grid[monsterY][monsterX-1] = MONSTER_CELL
                 elif grid[monsterY][monsterX-1] == EMPTY_CELL:
                     grid[monsterY][monsterX] = EMPTY_CELL
                     grid[monsterY][monsterX-1] = MONSTER_CELL
                 elif grid[monsterY][monsterX-1] == PLAYER_CELL and lives >= 0:
                     lives -= 1
-                    grid[monsterY][monsterX-1] == MONSTER_CELL
+                    grid[monsterY][monsterX-1] == EMPTY_CELL
+                    grid[monsterY][monsterX] = EMPTY_CELL
                     restart = True
             if moveMonster == 'right':
-                if grid[monsterY][monsterX+1] == DIAMOND_CELL:
-                    grid[monsterY][monsterX] = DIAMOND_CELL
+                if grid[monsterY][monsterX+1] == EMPTY_CELL:
+                    grid[monsterY][monsterX] = EMPTY_CELL
+                    grid[monsterY][monsterX+1] = MONSTER_CELL
+                if grid[monsterY][monsterX+1] == COIN_CELL:
+                    grid[monsterY][monsterX] = COIN_CELL
                     grid[monsterY][monsterX+1] = MONSTER_CELL
                 elif grid[monsterY][monsterX+1] == EMPTY_CELL:
                     grid[monsterY][monsterX] = EMPTY_CELL
                     grid[monsterY][monsterX+1] = MONSTER_CELL
                 elif grid[monsterY][monsterX+1] == PLAYER_CELL and lives >= 0:
                     lives -= 1 
-                    grid[monsterY][monsterX+1] == MONSTER_CELL
+                    grid[monsterY][monsterX+1] == EMPTY_CELL
+                    grid[monsterY][monsterX] = EMPTY_CELL
                     restart = True
             if moveMonster == 'up':
-                if grid[monsterY-1][monsterX] == DIAMOND_CELL:
-                    grid[monsterY][monsterX] = DIAMOND_CELL
+                if grid[monsterY-1][monsterX] == EMPTY_CELL:
+                    grid[monsterY][monsterX] = EMPTY_CELL
+                    grid[monsterY-1][monsterX] = MONSTER_CELL
+                if grid[monsterY-1][monsterX] == COIN_CELL:
+                    grid[monsterY][monsterX] = COIN_CELL
                     grid[monsterY-1][monsterX] = MONSTER_CELL
                 elif grid[monsterY-1][monsterX] == EMPTY_CELL:
                     grid[monsterY][monsterX] = EMPTY_CELL
                     grid[monsterY-1][monsterX] = MONSTER_CELL
                 elif grid[monsterY-1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -= 1
-                    grid[monsterY-1][monsterX] = MONSTER_CELL
+                    grid[monsterY-1][monsterX] = EMPTY_CELL
+                    grid[monsterY][monsterX] = EMPTY_CELL
                     restart = True
+
             if moveMonster == 'down':
-                if grid[monsterY+1][monsterX] == DIAMOND_CELL:
-                    grid[monsterY][monsterX] = DIAMOND_CELL
+                if grid[monsterY+1][monsterX] == EMPTY_CELL:
+                    grid[monsterY][monsterX] = EMPTY_CELL
+                    grid[monsterY+1][monsterX] = MONSTER_CELL
+                if grid[monsterY+1][monsterX] == COIN_CELL:
+                    grid[monsterY][monsterX] = COIN_CELL
                     grid[monsterY+1][monsterX] = MONSTER_CELL
                 elif grid[monsterY+1][monsterX] == EMPTY_CELL:
                     grid[monsterY][monsterX] = EMPTY_CELL
                     grid[monsterY+1][monsterX] = MONSTER_CELL
                 elif grid[monsterY+1][monsterX] == PLAYER_CELL and lives >= 0:
                     lives -=1
-                    grid[monsterY+1][monsterX] == MONSTER_CELL
+                    grid[monsterY+1][monsterX] == EMPTY_CELL
+                    grid[monsterY][monsterX] = EMPTY_CELL
                     restart = True
+
     drawGrid()
     canvas.after(800,monsterCanMove)
 canvas.after(800,monsterCanMove)
@@ -248,7 +267,7 @@ def move(moveX, moveY) :
     newPlayerX = playerX + moveX
     newPlayerY = playerY + moveY 
     if grid[newPlayerY][newPlayerX] != WALL_CELL :
-        if grid[newPlayerY][newPlayerX] == DIAMOND_CELL: # count score
+        if grid[newPlayerY][newPlayerX] == COIN_CELL: # count score
                 score += 10 
                 # winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL and lives > 0 and not end: # count lives
@@ -256,81 +275,85 @@ def move(moveX, moveY) :
             restart = True
             if lives == 0:
                 end = True
-                winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
         if moveX == 1 and moveY == 0: # move right --------------------------------------------------------------
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-                end = True
-                isWin = True
-            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-                grid[playerY][playerX] = PLAYER_CELL
-                grid[newPlayerY][newPlayerX] = HOME_CELL
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 hasNoKey = True
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                grid[playerY][playerX] = PLAYER_CELL
+                    
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                    winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                    end = True
+                    isWin = True  
             elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
-                grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
-                restart = True
+                grid[playerY][playerX] = EMPTY_CELL
             elif newPlayerX < len(grid[0]):
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
                 
-        elif moveX == -1 and moveY == 0: # move left -------------------------------------------------------------
+        if moveX == -1 and moveY == 0: # move left -------------------------------------------------------------
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-                end = True
-                isWin = True
-            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-                grid[playerY][playerX] = PLAYER_CELL
-                grid[newPlayerY][newPlayerX] = HOME_CELL
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 hasNoKey = True
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                grid[playerY][playerX] = PLAYER_CELL
+                    
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                    winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                    end = True
+                    isWin = True  
             elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
-                grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
-                restart = True
+                grid[playerY][playerX] = EMPTY_CELL
             elif newPlayerX >= 0:
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
 
-        elif moveX == 0 and moveY == 1: # move down --------------------------------------------------------------
+        if moveX == 0 and moveY == 1: # move down --------------------------------------------------------------
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-                end = True
-                isWin = True
-            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-                grid[playerY][playerX] = PLAYER_CELL
-                grid[newPlayerY][newPlayerX] = HOME_CELL
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 hasNoKey = True
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                grid[playerY][playerX] = PLAYER_CELL
+                    
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                    winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                    end = True
+                    isWin = True  
             elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
-                grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
-                restart = True
+                grid[playerY][playerX] = EMPTY_CELL
             elif newPlayerY < len(grid):
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
-        elif moveX == 0 and moveY == -1: # move up --------------------------------------------------------------
+        if moveX == 0 and moveY == -1: # move up --------------------------------------------------------------
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
                 hasKey = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-                end = True
-                isWin = True    
-            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-                grid[playerY][playerX] = PLAYER_CELL
-                grid[newPlayerY][newPlayerX] = HOME_CELL
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 hasNoKey = True
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                grid[playerY][playerX] = PLAYER_CELL
+                    
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                    winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                    end = True
+                    isWin = True 
             elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
-                grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
-                restart = True
+                grid[playerY][playerX] = EMPTY_CELL 
             elif newPlayerY >= 0:
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
+  
+        if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = MONSTER_CELL
+                restart = True
     drawGrid()
 # ---------------------------------------------------------------------------------------------------
 
@@ -341,10 +364,7 @@ def restartGame():
     if lives >= 0:
         grid[9][12]=PLAYER_CELL
         restart = False
-        
-        # canvas.after(1600,monsterCanMove)
-        # drawGrid()
-    canvas.after(800,drawGrid)
+    drawGrid()
 # ---------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------
@@ -354,8 +374,9 @@ def getStatus():
     grid=[]
     canvas.create_image(380,320, image=myBackground)
     if end and not isWin:
-        canvas.create_image(380,320, image=lostGame)  
-        canvas.create_text(380,400,text='You have ' + str(score) + ' scores' ,font=('Arial',30))
+        canvas.create_image(380,440, image=lostGame)  
+        canvas.create_text(380,520,text='You have ' + str(score) + ' scores' ,font=('Arial',30))
+        canvas.create_image(380,250,image=lost)
     elif end and isWin:
         canvas.create_image(380,320, image=congrats)
         canvas.create_text(380,400,text='You have ' + str(score) + ' scores',font=('Arial',30))
