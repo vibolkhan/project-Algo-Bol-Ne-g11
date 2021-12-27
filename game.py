@@ -31,6 +31,8 @@ coin =tk.PhotoImage(file="image/coin.png")
 congrats = tk.PhotoImage(file='image/congrats.png')
 lostGame = tk.PhotoImage(file='image/gameover.png')
 lost = tk.PhotoImage(file="image/lost.png")
+start = tk.PhotoImage(file='image/start.png')
+load = tk.PhotoImage(file='image/laod.png')
 # ---------------------------------------------------------------------------------------------------
 
 # ---------------------------------------
@@ -83,6 +85,15 @@ grid = [
 #12,9
 # ---------------------------------------------------------------------------------------------------
 # drawing
+
+def slide1():
+    canvas.create_image(380,320,image=start)
+def slide2():
+    canvas.create_image(380,320,image=load)
+
+slide1()
+canvas.after(700,slide2)
+
 def drawGrid():
     global end,lives,restart
     canvas.delete('all')
@@ -141,6 +152,9 @@ def drawGrid():
             x+=30
         x=10
         y+=30
+
+
+
 # ---------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------
