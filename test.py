@@ -98,8 +98,8 @@ def drawGrid():
     elif lives == 1:
         heart1 = canvas.create_image(380,30,image=heart_image)
     # -------------------------------------------- draw heart -------------------------------------------
-    canvas.create_text(620,30,text='Levels: 1',font=('Arial',18),fill="red") # show level
-    canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18),fill = "green") # show score
+    canvas.create_text(620,30,text='Levels: 1',font=('Arial',18),fill="white") # show level
+    canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18),fill = "white") # show score
     # -------------------------------------------- display message ---------------------------------------
     if hasNoKey:
         textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18),fill = "green")
