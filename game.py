@@ -43,18 +43,6 @@ end = False
 isWin = False
 restart = False
 # -------------------------------------------
-
-# ---------------------------------------
-# CONSTANTS
-EMPTY_CELL = 0
-PLAYER_CELL = 1
-MONSTER_CELL = 2 
-HOME_CELL = 3
-KEY_CELL = 4
-COIN_CELL = 5
-WALL_CELL = 6
-# ---------------------------------------
-
 grid = [
     [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ],
     [6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
@@ -82,6 +70,17 @@ def slide1():
     canvas.create_image(380,320,image=start)
 slide1()
 
+# ---------------------------------------
+# CONSTANTS
+EMPTY_CELL = 0
+PLAYER_CELL = 1
+MONSTER_CELL = 2 
+HOME_CELL = 3
+KEY_CELL = 4
+COIN_CELL = 5
+WALL_CELL = 6
+# ---------------------------------------
+# draw
 def drawGrid():
     canvas.delete('all')
     canvas.create_image(380,320, image=myBackground)
@@ -99,7 +98,6 @@ def drawGrid():
     # -------------------------------------------- draw heart -------------------------------------------
     canvas.create_text(620,30,text='Levels: ' + str(levels),font=('Arial',18,'bold'),fill='white') # show level
     canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18,'bold'),fill='white') # show score
-
     # -------------------------------------------- display message ---------------------------------------
     if hasNoKey:
         textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18,'bold'),fill='white') 
@@ -109,13 +107,11 @@ def drawGrid():
         canvas.itemconfig(textKey,text='You has key, you can go home now!')
     if hasKey:
         textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18,'bold'),fill='white')
-    # -------------------------------------------- display message ---------------------------------------
-
+    # -------------------------------------------- display message --------------------------------------
     # ------------------------------------------ end game ------------------------------------------------
     if end:
         getStatus()
     # ------------------------------------------ end game ------------------------------------------------
-
     # ------------------------------------------ restart game --------------------------------------------
     if restart and not end:
         restartGame()
@@ -260,7 +256,6 @@ def move(moveX, moveY) :
     if grid[newPlayerY][newPlayerX] != WALL_CELL :
         if grid[newPlayerY][newPlayerX] == COIN_CELL: # count score
                 score += 10 
-                # winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
             lostLife(playerY,playerX)
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL:

@@ -9,13 +9,7 @@ frame = tk.Frame()
 frame.master.title('Amazing game')
 canvas = tk.Canvas(frame)
 root.resizable(0,0)
-# ---------------------------------------------------------------------------------------------------
-# menubar
-menubar = tk.Menu(frame)  
-menubar.add_command(label="Welcome!") 
-menubar.add_command(label="Quit!", command=quit) 
-# display menubar
-root.config(menu=menubar)
+# --------------------------------------------------------------------------------------------------- 
 # ---------------------------------------------------------------------------------------------------
 # images
 myBackground=tk.PhotoImage(file='image/backg.png')
@@ -30,25 +24,14 @@ congrats = tk.PhotoImage(file='image/congrats.png')
 lostGame = tk.PhotoImage(file='image/gameover.png')
 lost = tk.PhotoImage(file="image/lost.png")
 start = tk.PhotoImage(file='image/start.png')
-
+win = tk.PhotoImage(file='image/win.png')
+champion = tk.PhotoImage(file='image/champion.png')
 # ---------------------------------------------------------------------------------------------------
-
-# ---------------------------------------
-# CONSTANTS
-EMPTY_CELL = 0
-PLAYER_CELL = 1
-MONSTER_CELL = 2 
-HOME_CELL = 3
-KEY_CELL = 4
-COIN_CELL = 5
-WALL_CELL = 6
-# ---------------------------------------
 
 # ---------------------------------------
 # VARIABLES
 lives = 3
 score = 0
-tomove=[]
 levels = 1
 # ---------------------------------------
 
@@ -61,11 +44,21 @@ isWin = False
 restart = False
 # -------------------------------------------
 
-# levels -------------------------------------------------------
+# ---------------------------------------
+# CONSTANTS
+EMPTY_CELL = 0
+PLAYER_CELL = 1
+MONSTER_CELL = 2 
+HOME_CELL = 3
+KEY_CELL = 4
+COIN_CELL = 5
+WALL_CELL = 6
+# ---------------------------------------
+
 grid = [
     [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ],
     [6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
-    [6 ,6 ,5 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,6 ,6 ,6 ,5 ,5 ,5, 5, 6, 5, 3 ,5 ,6 ],
+    [6 ,6 ,5 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,6 ,6 ,6 ,5 ,5 ,5, 5, 6, 5, 0 ,5 ,6 ],
     [6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ],
     [6 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5, 6 ],
     [6 ,5 ,6 ,6 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
@@ -75,12 +68,12 @@ grid = [
     [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,0 ,1 ,0 ,6 ,6 ,6 ,6 ,5 ,2 ,5 ,5 ,5 ,5 ,6 ],
     [6 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,0 ,0 ,0 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
     [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
-    [6 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ,5 ,2 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+    [6 ,5 ,4 ,5 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
     [6 ,5 ,6 ,6 ,5 ,6 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,2 ,5 ,6 ,5 ,6 ,5 ,6 ],
-    [6 ,4 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,5 ,5 ,6 ],
-    [6 ,2 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ],
+    [6 ,0 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,5 ,5 ,6 ],
+    [6 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,3 ,6 ],
     [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ],
-] 
+]
 
 # ---------------------------------------------------------------------------------------------------
 # drawing
@@ -90,23 +83,23 @@ def slide1():
 slide1()
 
 def drawGrid():
-    global end,lives,restart,levels
     canvas.delete('all')
     canvas.create_image(380,320, image=myBackground)
     canvas.create_text(330,30,text='Lives: ',font=('share',18,'bold'),fill='white')
     # -------------------------------------------- draw heart -------------------------------------------
     if lives == 3:
-        heart1 = canvas.create_image(380,30,image=heart_image)
-        heart2 = canvas.create_image(420,30,image=heart_image)
-        heart3 = canvas.create_image(460,30,image=heart_image)
+        canvas.create_image(380,30,image=heart_image)
+        canvas.create_image(420,30,image=heart_image)
+        canvas.create_image(460,30,image=heart_image)
     elif lives == 2:
-        heart1 = canvas.create_image(380,30,image=heart_image)
-        heart2 = canvas.create_image(420,30,image=heart_image)
+        canvas.create_image(380,30,image=heart_image)
+        canvas.create_image(420,30,image=heart_image)
     elif lives == 1:
-        heart1 = canvas.create_image(380,30,image=heart_image)
+        canvas.create_image(380,30,image=heart_image)
     # -------------------------------------------- draw heart -------------------------------------------
     canvas.create_text(620,30,text='Levels: ' + str(levels),font=('Arial',18,'bold'),fill='white') # show level
     canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18,'bold'),fill='white') # show score
+
     # -------------------------------------------- display message ---------------------------------------
     if hasNoKey:
         textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18,'bold'),fill='white') 
@@ -123,7 +116,7 @@ def drawGrid():
         getStatus()
     # ------------------------------------------ end game ------------------------------------------------
 
-    # ------------------------------------------ restart game ------------------------------------------------
+    # ------------------------------------------ restart game --------------------------------------------
     if restart and not end:
         restartGame()
     x=10
@@ -147,7 +140,6 @@ def drawGrid():
             x+=30
         x=10
         y+=30
-
 # ---------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------
@@ -260,7 +252,7 @@ def getPlayerX():
     return index
 
 def move(moveX, moveY) :
-    global lives,score,hasNoKey,hasKey,end,isWin,restart
+    global lives,score,hasNoKey,hasKey,end,isWin,restart,levels
     playerX = getPlayerX()
     playerY = getPlayerY()
     newPlayerX = playerX + moveX
@@ -269,44 +261,70 @@ def move(moveX, moveY) :
         if grid[newPlayerY][newPlayerX] == COIN_CELL: # count score
                 score += 10 
                 # winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
-        if moveX == 1 and moveY == 0: # move right --------------------------------------------------------------
-            if grid[newPlayerY][newPlayerX] == HOME_CELL:
-                meet_house(newPlayerY,newPlayerX)
-            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
-                lostLife(playerY,playerX)
-            elif newPlayerX < len(grid[0]):
-                grid[playerY][playerX] = EMPTY_CELL
-                grid[newPlayerY][newPlayerX] = PLAYER_CELL
-                
-        if moveX == -1 and moveY == 0: # move left -------------------------------------------------------------
-            if grid[newPlayerY][newPlayerX] == HOME_CELL:
-                meet_house(newPlayerY,newPlayerX)
-            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
-                lostLife(playerY,playerX)
-            elif newPlayerX >= 0:
-                grid[playerY][playerX] = EMPTY_CELL
-                grid[newPlayerY][newPlayerX] = PLAYER_CELL
-
-        if moveX == 0 and moveY == 1: # move down --------------------------------------------------------------
-            if grid[newPlayerY][newPlayerX] == HOME_CELL:
-                meet_house(newPlayerY,newPlayerX)
-            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
-                lostLife(playerY,playerX)
-            elif newPlayerY < len(grid):
-                grid[playerY][playerX] = EMPTY_CELL
-                grid[newPlayerY][newPlayerX] = PLAYER_CELL
-        if moveX == 0 and moveY == -1: # move up --------------------------------------------------------------
-            if grid[newPlayerY][newPlayerX] == HOME_CELL:
-                meet_house(newPlayerY,newPlayerX)
-            if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
-                lostLife(playerY,playerX)
-            elif newPlayerY >= 0:
-                grid[playerY][playerX] = EMPTY_CELL
-                grid[newPlayerY][newPlayerX] = PLAYER_CELL
+        if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+            lostLife(playerY,playerX)
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
                 restart = True
+        elif moveX == 1 and moveY == 0: # move right -------------------------------------------------------------  
+            if grid[newPlayerY][newPlayerX] == KEY_CELL:
+                hasKey = True  
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                end = True 
+                isWin = True  
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+                hasNoKey = True
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                grid[playerY][playerX] = PLAYER_CELL               
+            elif newPlayerX < len(grid[0]):
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = PLAYER_CELL
+                
+        elif moveX == -1 and moveY == 0: # move left -------------------------------------------------------------
+            if grid[newPlayerY][newPlayerX] == KEY_CELL:
+                hasKey = True  
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                end = True 
+                isWin = True  
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+                hasNoKey = True
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                grid[playerY][playerX] = PLAYER_CELL               
+            elif newPlayerX < len(grid[0]):
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = PLAYER_CELL
+
+        elif moveX == 0 and moveY == 1: # move down --------------------------------------------------------------
+            if grid[newPlayerY][newPlayerX] == KEY_CELL:
+                hasKey = True  
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                end = True 
+                isWin = True  
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+                hasNoKey = True
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                grid[playerY][playerX] = PLAYER_CELL               
+            elif newPlayerX < len(grid[0]):
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = PLAYER_CELL
+        elif moveX == 0 and moveY == -1: # move up --------------------------------------------------------------
+            if grid[newPlayerY][newPlayerX] == KEY_CELL:
+                hasKey = True  
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                end = True 
+                isWin = True  
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+                hasNoKey = True
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                grid[playerY][playerX] = PLAYER_CELL               
+            elif newPlayerX < len(grid[0]):
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = PLAYER_CELL
     drawGrid()
 # ---------------------------------------------------------------------------------------------------
 
@@ -317,7 +335,8 @@ def restartGame():
     if lives >= 0:
         grid[9][12]=PLAYER_CELL
         restart = False
-    drawGrid()
+        drawGrid()
+    
 # ---------------------------------------------------------------------------------------------------
 
 # ------------------------------------------------------------------
@@ -328,14 +347,119 @@ def getStatus():
     canvas.create_image(380,320, image=myBackground)
     if end and not isWin:
         canvas.create_image(380,440, image=lostGame)  
-        canvas.create_text(380,520,text='You have ' + str(score) + ' scores' ,font=('Arial',30))
+        canvas.create_text(380,520,text='Your score is : ' + str(score) + ' points' ,font=('Arial',30))
         canvas.create_image(380,250,image=lost)
     elif end and isWin:
-        canvas.create_image(380,320, image=congrats)
-        canvas.create_text(380,400,text='You have ' + str(score) + ' scores',font=('Arial',30))
-        levels += 1
+        canvas.create_image(380,410, image=congrats)
+        canvas.create_text(380,480,text='Your score is : ' + str(score) + ' points',font=('Arial',24))
+        if levels < 2:
+            canvas.create_image(380,230,image=win)
+            canvas.create_rectangle(290,510,470,550,fill='gray',outline='',tags='next')
+            canvas.create_text(380,530,text='Next levels',font=('Arial',14),fill='white',tags='next')
+            
+        if levels >= 2:
+            canvas.create_rectangle(10,10,90,50,fill='gray',outline='',tags='back')
+            canvas.create_text(45,30,text='<< Back',font=('Arial',14),fill='white',tags='back')
+        if levels == 3:
+            canvas.create_image(380,230,image=champion)
+
+def next(event):
+    global lives,score,hasKey,hasNoKey,end,isWin,levels,grid
+    lives = 3
+    score = 0
+    hasKey = False
+    hasNoKey = False
+    end = False
+    isWin = False
+    levels += 1
+    if levels == 2:
+        grid = [
+        [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ],
+        [6 ,4 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,6 ,5 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,6 ,6 ,6 ,5 ,5 ,5, 5, 6, 5, 5 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5, 6 ],
+        [6 ,5 ,6 ,6 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,2 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,2 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,5 ,2 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,0 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,6 ,6 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,0 ,1 ,0 ,6 ,6 ,6 ,6 ,5 ,2 ,5 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,0 ,0 ,0 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,5 ,6 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,2 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,3 ,6 ],
+        [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ]]
+    if levels == 3:
+        grid = [
+        [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,0 ,0 ,0 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ],
+        [6 ,4 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,6 ,5 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,6 ,6 ,6 ,5 ,5 ,5, 5, 6, 5, 5 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5, 6 ],
+        [6 ,5 ,6 ,6 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,2 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,2 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,5 ,2 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,0 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,6 ,6 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,0 ,1 ,0 ,6 ,6 ,6 ,6 ,5 ,2 ,5 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,0 ,0 ,0 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,5 ,6 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,2 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,3 ,6 ],
+        [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ]]
 # ------------------------------------------------------------------
 
+def back(event):
+    global lives,score,hasKey,hasNoKey,end,isWin,levels,grid
+    score = 0
+    hasKey = False
+    hasNoKey = False
+    end = False
+    isWin = False
+    lives = 3
+    levels -= 1
+    if levels == 1:
+            grid = [
+    [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ],
+    [6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+    [6 ,6 ,5 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,6 ,6 ,6 ,5 ,5 ,5, 5, 6, 5, 0 ,5 ,6 ],
+    [6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ],
+    [6 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5, 6 ],
+    [6 ,5 ,6 ,6 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+    [6 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,2 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,2 ,6 ,5 ,5 ,5 ,6 ],
+    [6 ,5 ,6 ,6 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+    [6 ,5 ,5 ,2 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,0 ,0 ,0 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,6 ,6 ,5 ,6 ],
+    [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,0 ,1 ,0 ,6 ,6 ,6 ,6 ,5 ,2 ,5 ,5 ,5 ,5 ,6 ],
+    [6 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,0 ,0 ,0 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+    [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+    [6 ,5 ,4 ,5 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+    [6 ,5 ,6 ,6 ,5 ,6 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,2 ,5 ,6 ,5 ,6 ,5 ,6 ],
+    [6 ,0 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,5 ,5 ,6 ],
+    [6 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,3 ,6 ],
+    [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ],
+]
+    if levels == 2:
+        grid = [
+        [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ],
+        [6 ,4 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,6 ,5 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,6 ,6 ,6 ,5 ,5 ,5, 5, 6, 5, 5 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5, 6 ],
+        [6 ,5 ,6 ,6 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,2 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,2 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,5 ,2 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,6 ,6 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,1 ,5 ,6 ,6 ,6 ,6 ,5 ,2 ,5 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,5 ,5 ,5 ,6 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,5 ,6 ,2 ,5 ,5 ,5 ,5 ,5 ,6 ,5 ,5 ,2 ,5 ,5 ,2 ,5 ,6 ,5 ,6 ,5 ,6 ],
+        [6 ,5 ,6 ,6 ,5 ,6 ,5 ,5 ,5 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,5 ,6 ,6 ,6 ,6 ,5 ,5 ,5 ,6 ],
+        [6 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,5 ,2 ,5 ,5 ,5 ,5 ,5 ,5 ,3 ,6 ],
+        [6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ,6 ]]
 # ---------------------------------------------------------------------------------------------------
 # lost lives
 def lostLife(positionY,positionX):
@@ -343,25 +467,6 @@ def lostLife(positionY,positionX):
     lives -= 1
     grid[positionY][positionX] = EMPTY_CELL
     grid[9][12] = PLAYER_CELL
-# ---------------------------------------------------------------------------------------------------
-
-# ---------------------------------------------------------------------------------------------------
-# meet house
-def meet_house(newPlayerY,newPlayerX):
-    global hasKey,hasNoKey,end,isWin
-    playerX = getPlayerX()
-    playerY = getPlayerY()
-    
-    if grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-        hasNoKey = True
-        grid[newPlayerY][newPlayerX] = HOME_CELL
-        grid[playerY][playerX] = PLAYER_CELL               
-    if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-        winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-        end = True 
-        isWin = True  
-    if grid[newPlayerY][newPlayerX] == KEY_CELL:
-        hasKey = True
 # ---------------------------------------------------------------------------------------------------
 
 # --------------------------------------------------------
@@ -383,7 +488,8 @@ root.bind('<Right>',move_right) #### keyboard
 root.bind('<Down>',move_down) #### keyboard
 root.bind('<Up>',move_up) #### keyboard
 # ---------------------------------------------------------------------------------------
-
+canvas.tag_bind('next','<Button-1>',next)
+canvas.tag_bind('back','<Button-1>',back)
 # ---------------------------------------------------------------------------------------
 # display all
 canvas.pack(expand=True, fill='both')
