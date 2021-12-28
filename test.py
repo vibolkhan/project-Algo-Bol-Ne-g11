@@ -258,7 +258,7 @@ def move(moveX, moveY) :
                 # winsound .PlaySound('sound/coin.wav', winsound.SND_FILENAME)
         if grid[newPlayerY][newPlayerX] == MONSTER_CELL and lives > 0 and not end: # count lives
             lives -= 1
-            restart = True
+            restart = True 
             if lives == 0:
                 end = True
                 winsound .PlaySound('sound/lost.wav', winsound.SND_FILENAME)
