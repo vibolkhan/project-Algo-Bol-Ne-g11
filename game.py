@@ -272,43 +272,9 @@ def move(moveX, moveY) :
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = MONSTER_CELL
                 restart = True
-        if moveX == 1 and moveY == 0: # move right --------------------------------------------------------------    
+        if moveX == 1 and moveY == 0: # move right -------------------------------------------------------------  
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
-                hasKey = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-                end = True 
-                isWin = True  
-            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-                hasNoKey = True
-                grid[newPlayerY][newPlayerX] = HOME_CELL
-                grid[playerY][playerX] = PLAYER_CELL       
-            elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
-                lostLife(playerY,playerX)
-            elif newPlayerX < len(grid[0]):
-                grid[playerY][playerX] = EMPTY_CELL
-                grid[newPlayerY][newPlayerX] = PLAYER_CELL
-                
-        if moveX == -1 and moveY == 0: # move left -------------------------------------------------------------
-            if grid[newPlayerY][newPlayerX] == KEY_CELL:
-                hasKey = True
-            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
-                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
-                end = True 
-                isWin = True  
-            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
-                hasNoKey = True
-                grid[newPlayerY][newPlayerX] = HOME_CELL
-                grid[playerY][playerX] = PLAYER_CELL       
-            elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
-                lostLife(playerY,playerX)
-            elif newPlayerX >= 0:
-                grid[playerY][playerX] = EMPTY_CELL
-                grid[newPlayerY][newPlayerX] = PLAYER_CELL
-
-        if moveX == 0 and moveY == 1: # move down --------------------------------------------------------------
-            if grid[newPlayerY][newPlayerX] == KEY_CELL:
-                hasKey = True
+                hasKey = True  
             if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 end = True 
@@ -319,12 +285,13 @@ def move(moveX, moveY) :
                 grid[playerY][playerX] = PLAYER_CELL               
             elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 lostLife(playerY,playerX)
-            elif newPlayerY < len(grid):
+            elif newPlayerX < len(grid[0]):
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
-        if moveX == 0 and moveY == -1: # move up --------------------------------------------------------------
+                
+        if moveX == -1 and moveY == 0: # move left -------------------------------------------------------------
             if grid[newPlayerY][newPlayerX] == KEY_CELL:
-                hasKey = True
+                hasKey = True  
             if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
                 winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
                 end = True 
@@ -332,12 +299,47 @@ def move(moveX, moveY) :
             elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
                 hasNoKey = True
                 grid[newPlayerY][newPlayerX] = HOME_CELL
-                grid[playerY][playerX] = PLAYER_CELL       
+                grid[playerY][playerX] = PLAYER_CELL               
             elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
                 lostLife(playerY,playerX)
-            elif newPlayerY >= 0:
+            elif newPlayerX < len(grid[0]):
                 grid[playerY][playerX] = EMPTY_CELL
                 grid[newPlayerY][newPlayerX] = PLAYER_CELL
+
+        if moveX == 0 and moveY == 1: # move down --------------------------------------------------------------
+            if grid[newPlayerY][newPlayerX] == KEY_CELL:
+                hasKey = True  
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                end = True 
+                isWin = True  
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+                hasNoKey = True
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                grid[playerY][playerX] = PLAYER_CELL               
+            elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+                lostLife(playerY,playerX)
+            elif newPlayerX < len(grid[0]):
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = PLAYER_CELL
+        if moveX == 0 and moveY == -1: # move up --------------------------------------------------------------
+            if grid[newPlayerY][newPlayerX] == KEY_CELL:
+                hasKey = True  
+            if grid[newPlayerY][newPlayerX] == HOME_CELL and hasKey:
+                winsound .PlaySound('sound/win.wav', winsound.SND_FILENAME)
+                end = True 
+                isWin = True  
+            elif grid[newPlayerY][newPlayerX] == HOME_CELL and not hasKey: # get key
+                hasNoKey = True
+                grid[newPlayerY][newPlayerX] = HOME_CELL
+                grid[playerY][playerX] = PLAYER_CELL               
+            elif grid[newPlayerY][newPlayerX] == MONSTER_CELL:
+                lostLife(playerY,playerX)
+            elif newPlayerX < len(grid[0]):
+                grid[playerY][playerX] = EMPTY_CELL
+                grid[newPlayerY][newPlayerX] = PLAYER_CELL
+
+        
     drawGrid()
 # ---------------------------------------------------------------------------------------------------
 
