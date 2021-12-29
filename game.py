@@ -347,7 +347,7 @@ def getStatus():
     elif end and isWin:
         canvas.create_image(380,410, image=congrats)
         canvas.create_text(380,480,text='Your score is : ' + str(score) + ' points',font=('Arial',24))
-        if levels < 2:
+        if levels <= 2:
             canvas.create_image(380,230,image=win)
             canvas.create_rectangle(290,510,470,550,fill='gray',outline='',tags='next')
             canvas.create_text(380,530,text='Next levels',font=('Arial',14),fill='white',tags='next')
