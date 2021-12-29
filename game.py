@@ -100,13 +100,13 @@ def drawGrid():
     canvas.create_text(150,30,text='Score: ' + str(score),font=('Arial',18,'bold'),fill='white') # show score
     # -------------------------------------------- display message ---------------------------------------
     if hasNoKey:
-        textKey = canvas.create_text(380,70,text='You has no key, you need to find key!',font=('Arial',18,'bold'),fill='white') 
+        textKey = canvas.create_text(380,70,text='You have no key, you need to find key!',font=('Arial',18,'bold'),fill='white') 
     if hasKey and not hasNoKey:
-        textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18,'bold'),fill='white')
+        textKey = canvas.create_text(380,70,text='You have key, you can go home now!',font=('Arial',18,'bold'),fill='white')
     if hasNoKey and hasKey:
-        canvas.itemconfig(textKey,text='You has key, you can go home now!')
+        canvas.itemconfig(textKey,text='You have key, you can go home now!')
     if hasKey:
-        textKey = canvas.create_text(380,70,text='You has key, you can go home now!',font=('Arial',18,'bold'),fill='white')
+        textKey = canvas.create_text(380,70,text='You have key, you can go home now!',font=('Arial',18,'bold'),fill='white')
     # -------------------------------------------- display message --------------------------------------
     # ------------------------------------------ end game ------------------------------------------------
     if end:
